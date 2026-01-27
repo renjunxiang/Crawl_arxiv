@@ -24,7 +24,6 @@
 └── 📂 config/
 │  ├── 📄 __init__.py
 │  ├── 📄 LLM_Client.py # 大模型接口调用配置
-│  ├── 📄 LLM_Keywords.py # 大模型关键词配置
 │  ├── 📄 institution.py # 关注的机构清单
 └── 📂 tools/
 │  ├── 📄 __init__
