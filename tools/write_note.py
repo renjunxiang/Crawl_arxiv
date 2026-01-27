@@ -1,0 +1,87 @@
+import asyncio
+from copy import deepcopy
+import os
+import PyPDF2
+from config.LLM_Client import client
+from config.institution import company, college  # 导入institution配置
+import json
+
+institution = list(company.keys()) + list(college.keys())
+
+
+async def write_note(paper: dict, model_name: str) -> str:
+    file_path = paper["file_path"]
+    text = ""
+    with open(file_path, "rb") as file:
+        reader = PyPDF2.PdfReader(file)
+        for page in reader.pages:
+            text += page.extract_text()
+    text = text.encode("utf-8", errors="replace").decode("utf-8")
+    text_len = len(text.split())
+    print(f"论文长度：{text_len}")
+
+    system_message = f"""
+        你是一个论文笔记助手，请阅读论文内容，严格按照格式写这篇论文的笔记，不要带有markdown格式，字数控制在900字以内。格式如下：笔记标题：（中文短句说明论文的贡献）\n\n🟦文章简介\n研究问题：（论文试图解决什么问题）\n主要贡献：（论文有什么贡献）\n\n🟦重点思路 （逐条写论文的研究方法是什么，以🔺作为开头）\n\n🟦分析总结 （逐条写论文通过实验分析得到了哪些结论，以🔺作为开头）
+    """
+    # 非思考模型
+    if "qwen2.5" in model_name:
+        response = await client.chat.completions.create(
+            model=model_name,
+            messages=[
+                {
+                    "role": "system",
+                    "content": system_message,
+                },
+                {"role": "user", "content": f"论文内容为：\n{text}"},
+            ],
+            max_completion_tokens=1000,
+            temperature=0.5,
+        )
+    else:
+        response = await client.chat.completions.create(
+            model=model_name,
+            messages=[
+                {
+                    "role": "system",
+                    "content": system_message,
+                },
+                {"role": "user", "content": f"论文内容为：\n{text}"},
+            ],
+            max_completion_tokens=1000,
+            temperature=0.5,
+            extra_body={"enable_thinking": False},
+        )
+
+    content = response.choices[0].message.content.strip()
+    content = f"""📖标题：{paper["title"]}\n🌐来源：arXiv, {paper["arxiv_id"]}\n\n{content}
+    """
+    if text_len > 129000:
+        content = "论文长度超过129000，上下文截断"
+    paper_ = deepcopy(paper)
+    paper_["note"] = content
+
+    return paper_
+
+
+async def write_notes(papers: list, model_name: str, max_concurrent=10) -> str:
+    # 使用信号量控制并发数
+    semaphore = asyncio.Semaphore(max_concurrent)
+
+    async def bounded_task(paper: dict) -> dict:
+        async with semaphore:  # 限制并发数量
+            return await write_note(paper, model_name)
+
+    # 创建任务列表
+    tasks = [asyncio.create_task(bounded_task(paper)) for paper in papers]
+    total = len(tasks)
+    results: list[dict] = []
+    completed = 0
+    # 按完成顺序收集，并打印进度
+    for coro in asyncio.as_completed(tasks):
+        res = await coro
+        completed += 1
+        print(f"【{completed}/{total}】已完成")
+
+        results.append(res)
+
+    return results
