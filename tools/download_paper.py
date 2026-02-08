@@ -64,7 +64,7 @@ class DownloadPaper:
             except Exception as e:
                 print(f"下载失败 ({url}): {str(e)}")
                 print(f"下载成功: {paper.get('arxiv_id', '')}")
-                time.sleep(0.5)  # 避免请求过快
+                time.sleep(1)  # 避免请求过快
 
         print(
             f"\n所有下载完成! 共下载 {len(papers)} 个文件到 {os.path.abspath(target_folder)}"
