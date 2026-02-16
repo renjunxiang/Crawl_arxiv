@@ -76,6 +76,13 @@ async def main(date: str, filter_llm: str, institution_llm: str, note_llm: str):
             json.dump(download_info, f, ensure_ascii=False, indent=4)
 
     # =================================机构筛选=================================
+    """
+    1.读取downloaded.json文件
+    2.遍历每一篇论文，根据是否有institution_status字段识别是否已经经过机构筛选
+    3.如果没有institution_status字段，则将其设置为pending，等待后续处理。
+    4.全部处理完后，根据institution_status字段筛选出keep的论文。
+    5.将筛选出的论文保存到filter_institution.json文件中。
+    """
     print(f"开始根据机构筛选论文")
     if os.path.exists(f"./output/{date}/filter_institution.json"):
         with open(
@@ -83,11 +90,42 @@ async def main(date: str, filter_llm: str, institution_llm: str, note_llm: str):
         ) as f:
             filter_institution = json.load(f)
     else:
-        filter_institution = await find_institution_batch(
-            download_info, institution_llm
-        )
+        downloaded_json_path = f"./output/{date}/downloaded.json"
+
+        # 初始化 institution_status 字段（如果不存在）
+        for paper in download_info:
+            if "institution_status" not in paper:
+                paper["institution_status"] = "pending"
+
+        # 保存初始化后的状态
+        with open(downloaded_json_path, "w", encoding="utf-8") as f:
+            json.dump(download_info, f, ensure_ascii=False, indent=4)
+
+        # 过滤出待处理的论文
+        pending_papers = [
+            p for p in download_info if p.get("institution_status") == "pending"
+        ]
+
+        if pending_papers:
+            print(f"待处理论文: {len(pending_papers)} 篇")
+            await find_institution_batch(
+                pending_papers,
+                institution_llm,
+                downloaded_json_path=downloaded_json_path,
+            )
+            # 重新加载更新后的 download_info
+            with open(downloaded_json_path, "r", encoding="utf-8") as f:
+                download_info = json.load(f)
+        else:
+            print(f"所有论文已处理完成")
+
+        # 提取已处理的论文作为 filter_institution
+        filter_institution = [
+            p for p in download_info if p.get("institution_status") == "keep"
+        ]
         print(f"根据机构筛选出 {len(filter_institution)} 篇论文\n")
-        # 满足条件的论文清单
+
+        # 保存 filter_institution.json（用于后续步骤）
         with open(
             f"./output/{date}/filter_institution.json", "w", encoding="utf-8"
         ) as f:
@@ -116,7 +154,8 @@ if __name__ == "__main__":
 
     model_name = {
         "filter": "qwen-plus",
-        "institution": "qwen2.5-72b-instruct",
+        # "institution": "qwen2.5-72b-instruct",
+        "institution": "qwen-plus",
         "note": "qwen-plus",
     }
 
