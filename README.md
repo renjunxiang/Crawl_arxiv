@@ -8,7 +8,11 @@
 </div>
 
 ## 更新日志
-- **2026-02-26**：
+- **2026-02-18**：
+  - 优化主题筛选：更新了`filter_paper.py`中的提示词，优化论文标签；
+  - 新增机构分类：更新了`institution.py`、`filter_institution.py`，划分为“国外工业界”、“国内工业界”、“国外学术界”、“国内学术界”、“其他”；
+  - 新增笔记分类：更新了`write_note.py`、`main.py`，按照机构分类拆分笔记，方便分类阅读。
+- **2026-02-16**：
   - 优化主题筛选：更新了`filter_paper.py`中的提示词，让大模型尽可能根据论文主要创新点来命名；
   - 优化论文命名：新增`filter_institution.py`中的重命名逻辑，根据机构筛选结果，重命名为`{arxiv_id}【{category}-{institution}】{title}`，如`2602.10410v1【高效注意力机制-谷歌】LUCID_ Attention with Preconditioned Representations`；
 - **2026-02-08**：

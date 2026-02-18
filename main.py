@@ -52,7 +52,7 @@ async def main(date: str, filter_llm: str, institution_llm: str, note_llm: str):
         results = await filter.process_batch_llm(papers[:])
         papers_filter = []
         for res in results:
-            if res["category"] != "不相关":
+            if res["tag"] != "不相关":
                 papers_filter.append(res)
         print(f"筛选出 {len(papers_filter)} 篇论文\n")
         # 满足条件的论文清单
@@ -142,8 +142,93 @@ async def main(date: str, filter_llm: str, institution_llm: str, note_llm: str):
         with open(f"./output/{date}/notes.json", "w", encoding="utf-8") as f:
             json.dump(notes, f, ensure_ascii=False, indent=4)
 
-    with open(f"./output/{date}/notes.txt", "w", encoding="utf-8") as f:
-        for note in notes:
+    if not os.path.exists(f"./output/{date}/notes.txt"):
+        with open(f"./output/{date}/notes.txt", "w", encoding="utf-8") as f:
+            for note in notes:
+                f.write("=" * 30 + "\n\n")
+                f.write(note["institution"] + "\n\n")
+                f.write(note["note"] + "\n\n")
+
+    # =================================笔记分类=================================
+    if not os.path.exists(f"./output/{date}/institution"):
+        os.makedirs(f"./output/{date}/institution")
+
+    foreign_industry, domestic_industry, foreign_academia, domestic_academia, other = (
+        [],
+        [],
+        [],
+        [],
+        [],
+    )
+    for note in notes:
+        if note["institution_category"] == "国外工业界":
+            foreign_industry.append(note)
+        elif note["institution_category"] == "国内工业界":
+            domestic_industry.append(note)
+        elif note["institution_category"] == "国外学术界":
+            foreign_academia.append(note)
+        elif note["institution_category"] == "国内学术界":
+            domestic_academia.append(note)
+        else:
+            other.append(note)
+
+    with open(
+        f"./output/{date}/institution/foreign_industry.json", "w", encoding="utf-8"
+    ) as f:
+        json.dump(foreign_industry, f, ensure_ascii=False, indent=4)
+        print(f"合计 {len(foreign_industry)} 篇国外工业界的论文笔记")
+    with open(
+        f"./output/{date}/institution/domestic_industry.json", "w", encoding="utf-8"
+    ) as f:
+        json.dump(domestic_industry, f, ensure_ascii=False, indent=4)
+        print(f"合计 {len(domestic_industry)} 篇国内工业界的论文笔记")
+    with open(
+        f"./output/{date}/institution/foreign_academia.json", "w", encoding="utf-8"
+    ) as f:
+        json.dump(foreign_academia, f, ensure_ascii=False, indent=4)
+        print(f"合计 {len(foreign_academia)} 篇国外学术界的论文笔记")
+    with open(
+        f"./output/{date}/institution/domestic_academia.json", "w", encoding="utf-8"
+    ) as f:
+        json.dump(domestic_academia, f, ensure_ascii=False, indent=4)
+        print(f"合计 {len(domestic_academia)} 篇国内学术界的论文笔记")
+    with open(f"./output/{date}/institution/other.json", "w", encoding="utf-8") as f:
+        json.dump(other, f, ensure_ascii=False, indent=4)
+        print(f"合计 {len(other)} 篇其他机构的论文笔记")
+
+    with open(
+        f"./output/{date}/institution/foreign_industry.txt", "w", encoding="utf-8"
+    ) as f:
+        for note in foreign_industry:
+            f.write("=" * 30 + "\n\n")
+            f.write(note["institution"] + "\n\n")
+            f.write(note["note"] + "\n\n")
+
+    with open(
+        f"./output/{date}/institution/domestic_industry.txt", "w", encoding="utf-8"
+    ) as f:
+        for note in domestic_industry:
+            f.write("=" * 30 + "\n\n")
+            f.write(note["institution"] + "\n\n")
+            f.write(note["note"] + "\n\n")
+
+    with open(
+        f"./output/{date}/institution/foreign_academia.txt", "w", encoding="utf-8"
+    ) as f:
+        for note in foreign_academia:
+            f.write("=" * 30 + "\n\n")
+            f.write(note["institution"] + "\n\n")
+            f.write(note["note"] + "\n\n")
+
+    with open(
+        f"./output/{date}/institution/domestic_academia.txt", "w", encoding="utf-8"
+    ) as f:
+        for note in domestic_academia:
+            f.write("=" * 30 + "\n\n")
+            f.write(note["institution"] + "\n\n")
+            f.write(note["note"] + "\n\n")
+    with open(f"./output/{date}/institution/other.txt", "w", encoding="utf-8") as f:
+        for note in other:
             f.write("=" * 30 + "\n\n")
             f.write(note["institution"] + "\n\n")
             f.write(note["note"] + "\n\n")

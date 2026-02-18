@@ -36,7 +36,7 @@ class FilterPaper:
             if kw in context.lower():
                 result.update(
                     {
-                        "category": "相关",
+                        "tag": "相关",
                         "success": True,
                     }
                 )
@@ -44,7 +44,7 @@ class FilterPaper:
         else:
             result.update(
                 {
-                    "category": "不相关",
+                    "tag": "不相关",
                     "success": True,
                 }
             )
@@ -59,22 +59,22 @@ class FilterPaper:
         给定如下信息：
         标题：{title}
         摘要：{summary}
-        请根据论文的标题和摘要，判断这篇论文是否属于大模型(LLM)相关研究，并返回一个标签。如果
-        
+        请根据论文的标题和摘要，判断这篇论文是否属于大模型(LLM)中我重点关注的研究方向，并返回一个标签。
+
         我重点关注的研究方向包括：
-        1. 预训练算法及语料：预训练方法、数据清洗、数据配比、数据质量评估、Scaling Law等
-        2. 后训练算法及数据：SFT微调、指令微调数据、奖励模型(Reward Model)、RLHF/DPO/PPO等强化学习对齐方法
-        3. 推理过程优化：思维链(CoT)、思维链压缩、推理加速、测试时计算(Test-time Compute)、Long CoT
-        4. 模型评估基准：大模型评测方法、评测数据集、能力评估、安全性评估
-        5. 大模型应用：RAG检索增强生成、Agent智能体、工具调用、DeepResearch、多模态应用
-        6. 模型技术报告：知名开源模型发布(如DeepSeek、Qwen、Llama、GPT等)的技术细节报告
-        7. 安全对齐：模型安全、价值对齐、有害内容检测、安全语料构建、红队测试
-        8. 模型架构创新：Transformer改进、MoE混合专家、高效注意力机制、模型压缩与量化
+        1. 预训练算法及语料：预训练方法、预训练语料、Scaling Law等
+        2. 后训练算法及数据：SFT微调、微调数据集、奖励模型(Reward Model)、RLHF/DPO/PPO等强化学习对齐方法
+        3. 推理过程优化：思维链(CoT)优化、推理加速、测试时拓展(Test-time Scaling)
+        4. 模型评估基准：大模型评测方法、评测数据集
+        5. 大模型应用：RAG检索增强生成、Agent智能体、大模型工具集、DeepResearch
+        6. 模型技术报告：知名开源模型发布(如DeepSeek、Qwen、Llama、GPT等)的技术报告
+        7. 大模型安全：模型安全对齐、安全语料构建
+        8. 模型架构创新：Transformer改进、MoE混合专家、高效注意力机制
         
         返回要求：
         - 如果与上述方向无关，返回"不相关"
-        - 如果相关，请返回具体的研究方向标签，如"预训练数据"、"SFT微调"、"RLHF对齐"、"思维链推理"、"RAG应用"、"Agent系统"、"模型评测"、"DeepSeek技术报告"、"安全对齐"等
-        - 如果同时涉及多个方向，返回一个最主要的研究方向标签
+        - 如果相关，请返回一个最能代表论文研究内容的标签，如"数学语料"、"课程学习"、"过程奖励"、"快慢思考"、"奥数基准"、"RAG检索优化"、"Agent记忆"、"DeepSeek技术报告"、"安全对齐"、"MOE架构"等，这些仅供参考，不代表绝对分类。
+        - 如果同时涉及多个方向，返回一个最主要的研究内容标签
         - 只返回标签，不要有任何解释或额外内容
         """
         result = deepcopy(paper)
@@ -91,7 +91,7 @@ class FilterPaper:
             )
             result.update(
                 {
-                    "category": response.choices[0].message.content.strip(),
+                    "tag": response.choices[0].message.content.strip(),
                     "success": True,
                 }
             )
@@ -100,7 +100,7 @@ class FilterPaper:
             print(f"处理问题出错: {title}, 错误: {str(e)}")
             result.update(
                 {
-                    "category": "不相关",
+                    "tag": "不相关",
                     "success": False,
                 }
             )
@@ -149,7 +149,7 @@ async def main():
     results = await filter.process_batch_llm(papers)
     papers_filter = []
     for res in results:
-        if res["category"] != "不相关":
+        if res["tag"] != "不相关":
             papers_filter.append(res)
     print(f"筛选出 {len(papers_filter)} 篇论文")
     # 满足条件的论文清单

@@ -4,11 +4,21 @@ import os
 import re
 import PyPDF2
 from config.LLM_Client import client
-from config.institution import company, college  # 导入institution配置
+from config.institution import (
+    foreign_industry,
+    domestic_industry,
+    foreign_academia,
+    domestic_academia,
+)  # 导入institution配置
 import json
 
 # 合并机构
-institution = {**company, **college}
+institution = {
+    **foreign_industry,
+    **domestic_industry,
+    **foreign_academia,
+    **domestic_academia,
+}
 
 
 async def find_institution(paper: dict, model_name: str) -> str:
@@ -53,10 +63,30 @@ async def find_institution(paper: dict, model_name: str) -> str:
                     content = response.choices[0].message.content.strip()
                     paper_ = deepcopy(paper)
                     paper_["institution"] = content
+
+                    # 取第一个机构
+                    first_institution = paper_["institution"].split("、")[0]
+                    # 清理机构名称中的非法字符（Windows文件名不允许的字符）
+                    invalid_chars = r'[<>:"/\\|?*\x00-\x1f]'
+                    first_institution = re.sub(invalid_chars, "_", first_institution)
+                    paper_["first_institution"] = first_institution
+                    if first_institution in foreign_industry:
+                        paper_["institution_category"] = "国外工业界"
+                    elif first_institution in domestic_industry:
+                        paper_["institution_category"] = "国内工业界"
+                    elif first_institution in foreign_academia:
+                        paper_["institution_category"] = "国外学术界"
+                    elif first_institution in domestic_academia:
+                        paper_["institution_category"] = "国内学术界"
+                    else:
+                        paper_["institution_category"] = "其他机构"
+
     except Exception as e:
         print(f"Error: {e}")
         paper_ = deepcopy(paper)
         paper_["institution"] = "无"
+        paper_["first_institution"] = "无"
+        paper_["institution_category"] = "无"
 
     return paper_
 
@@ -68,38 +98,34 @@ def rename_file_with_institution(paper: dict) -> dict:
           -> 2601.08276v1【轨迹学习-浙大】ToolACE-MCP Generalizing History-Aware Routing from MCP Tools to the Agent Web.pdf
     """
     old_file_path = paper["file_path"]
-    institution_name = paper["institution"].split("、")[0]  # 取第一个机构
-
-    # 清理机构名称中的非法字符（Windows文件名不允许的字符）
-    invalid_chars = r'[<>:"/\\|?*\x00-\x1f]'
-    institution_name = re.sub(invalid_chars, "_", institution_name)
+    first_institution = paper["first_institution"]
 
     # 如果文件名已经包含机构名称，则跳过
-    if f"-{institution_name}" in old_file_path:
+    if f"-{first_institution}" in old_file_path:
         print(f"文件名已包含机构名称，跳过重命名: {filename}")
         return paper
 
-    # 解析原文件名: arxiv_id【category】title.pdf
+    # 解析原文件名: arxiv_id【tag】title.pdf
     filename = os.path.basename(old_file_path)
     dir_path = os.path.dirname(old_file_path)
 
     print(f"尝试重命名文件: {filename}")
-    print(f"机构名称: {institution_name}")
+    print(f"第一个机构名称: {first_institution}")
 
-    # 找到【】的位置，在 category 后添加 -机构名称
-    # 原格式: arxiv_id【category】title.pdf
-    # 新格式: arxiv_id【category-机构名称】title.pdf
-    # 使用更宽松的正则：匹配 arxiv_id【category】剩余部分.pdf
+    # 找到【】的位置，在 tag 后添加 -机构名称
+    # 原格式: arxiv_id【tag】title.pdf
+    # 新格式: arxiv_id【tag-机构名称】title.pdf
+    # 使用更宽松的正则：匹配 arxiv_id【tag】剩余部分.pdf
     match = re.match(r"^(.+?)【(.+?)】(.+\.pdf)$", filename)
     if match:
         arxiv_id = match.group(1)  # arxiv_id
-        category = match.group(2)  # category
+        tag = match.group(2)  # tag
         title_part = match.group(3)  # title.pdf
 
-        print(f"正则匹配成功: arxiv_id={arxiv_id}, category={category}")
+        print(f"正则匹配成功: arxiv_id={arxiv_id}, tag={tag}")
 
         # 构建新文件名
-        new_filename = f"{arxiv_id}【{category}-{institution_name}】{title_part}"
+        new_filename = f"{arxiv_id}【{tag}-{first_institution}】{title_part}"
         new_file_path = os.path.join(dir_path, new_filename)
 
         # 如果新文件已存在，先删除（避免冲突）

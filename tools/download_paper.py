@@ -30,7 +30,7 @@ class DownloadPaper:
             print(f"正在下载 ({idx}/{len(papers)}): {paper.get('arxiv_id', '')}")
             url = paper.get("pdf_url", "")
             title = paper.get("title", "")
-            category = paper.get("category", "")
+            tag = paper.get("tag", "")
             arxiv_id = paper.get("arxiv_id", "")
             try:
                 # 替换非法字符为 _
@@ -40,7 +40,7 @@ class DownloadPaper:
                 sanitized = sanitized.strip().strip(".")
 
                 # 构建完整文件路径
-                filename = f"{arxiv_id}【{category}】{sanitized}.pdf"
+                filename = f"{arxiv_id}【{tag}】{sanitized}.pdf"
                 file_path = os.path.join(target_folder, filename)
 
                 # 检查文件是否已存在
