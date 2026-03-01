@@ -1,0 +1,140 @@
+[
+    {
+        "title": "IMMACULATE: A Practical LLM Auditing Framework via Verifiable Computation",
+        "authors": [
+            "Yanpei Guo",
+            "Wenjie Qu",
+            "Linyu Wu",
+            "Shengfang Zhai",
+            "Lionel Z. Wang",
+            "Ming Xu",
+            "Yue Liu",
+            "Binhang Yuan",
+            "Dawn Song",
+            "Jiaheng Zhang"
+        ],
+        "categories": [
+            "cs.CR",
+            "cs.AI"
+        ],
+        "published_date": "2026-02-26",
+        "arxiv_id": "2602.22700v1",
+        "pdf_url": "https://arxiv.org/pdf/2602.22700v1",
+        "summary": "Commercial large language models are typically deployed as black-box API services, requiring users to trust providers to execute inference correctly and report token usage honestly. We present IMMACULATE, a practical auditing framework that detects economically motivated deviations-such as model substitution, quantization abuse, and token overbilling-without trusted hardware or access to model internals. IMMACULATE selectively audits a small fraction of requests using verifiable computation, achieving strong detection guarantees while amortizing cryptographic overhead. Experiments on dense and MoE models show that IMMACULATE reliably distinguishes benign and malicious executions with under 1% throughput overhead. Our code is published at https://github.com/guo-yanpei/Immaculate.",
+        "tag": "大模型审计",
+        "success": true,
+        "file_path": "./output/2026-02-26/papers\\2602.22700v1【大模型审计-新加坡国立大学】IMMACULATE_ A Practical LLM Auditing Framework via Verifiable Computation.pdf",
+        "institution_status": "keep",
+        "institution": "新加坡国立大学、南洋理工大学",
+        "first_institution": "新加坡国立大学",
+        "institution_category": "国外学术界",
+        "note": "📖标题：IMMACULATE: A Practical LLM Auditing Framework via Verifiable Computation\n🌐来源：arXiv, 2602.22700v1\n\n笔记标题：实用黑箱大模型审计框架\n\n🛎️文章简介  \n🔸研究问题：如何在不依赖可信硬件、不访问模型内部参数的前提下，高效检测商业大语言模型API服务中的经济性作弊行为（如模型替换、激进量化、token多计费）？  \n🔸主要贡献：提出IMMACULATE框架，首次将概率化抽样审计与可验证计算结合，并设计Logit距离分布（LDD）作为抗浮点非确定性的可验证度量，实现低开销、强保证、全兼容的黑箱LLM审计。\n\n📝重点思路  \n🔸采用随机化抽样审计策略，仅对极小比例（如千分之一）的用户请求生成密码学证明，使证明开销被海量日常请求摊薄至可忽略水平。  \n🔸提出Logit距离分布（LDD）指标，通过比对部署模型与全精度参考模型在各离散决策步产生的logits距离分布，将不可验证的完整执行转化为可验证的统计指纹。  \n🔸引入控制流对齐机制，在固定离散选择（如token采样结果）前提下计算logits偏差，规避因微小数值误差导致路径分叉带来的不可比性。  \n🔸设计Top-K距离优化方案，服务器仅需承诺被选中的前K个logit索引而非全部logits向量，大幅降低存储与通信开销。  \n🔸构建端到端协议：模型方发布全精度模型哈希承诺；推理时记录并承诺每步logits；审计时由服务器在TEE中用全精度模型重算logits并生成LDD证明。\n\n🔎分析总结  \n🔸实验表明，良性BF16执行的LDD呈现尖锐集中分布且尾部衰减极快，而FP8量化使尾部概率提升2–3个数量级，模型替换更导致极端尾部质量增加达100倍以上。  \n🔸基于LDD尾部概率（如Pr[TV>0.1]）的单请求判别规则，在模型替换攻击下检测率超95%，在FP8量化下仍达1.3%–10.3%，满足随机审计所需的最低检测率要求。  \n🔸理论分析证实：对α=10%恶意服务器，仅需约3000次审计即可以>95%概率检出；在10⁻⁵级误报率下，拒绝诚实服务器的概率低于10⁻⁷，满足强完备性与可靠性。  \n🔸在vLLM上实现的原型系统对LLaMA3-70B等主流模型引入平均仅0.3%–1.0%吞吐损耗，验证了其工程实用性。  \n🔸LDD对多种距离度量（TV、KL、Top-K）和模型架构（Dense/MoE）均保持稳定区分能力，证明其泛化性与鲁棒性。\n\n💡个人观点  \n该工作创新性地跳出“逐比特复现”的传统验证范式，转而构建面向LLM特性的语义级可验证指纹——LDD，巧妙化解浮点非确定性这一根本障碍；其“经济驱动的抽检+统计可证”的设计，首次在完备性、效率与隐私间取得实质性平衡，为黑箱AI服务治理提供了可落地的技术路径。\n    "
+    },
+    {
+        "title": "ParamMem: Augmenting Language Agents with Parametric Reflective Memory",
+        "authors": [
+            "Tianjun Yao",
+            "Yongqiang Chen",
+            "Yujia Zheng",
+            "Pan Li",
+            "Zhiqiang Shen",
+            "Kun Zhang"
+        ],
+        "categories": [
+            "cs.LG",
+            "cs.MA"
+        ],
+        "published_date": "2026-02-26",
+        "arxiv_id": "2602.23320v1",
+        "pdf_url": "https://arxiv.org/pdf/2602.23320v1",
+        "summary": "Self-reflection enables language agents to iteratively refine solutions, yet often produces repetitive outputs that limit reasoning performance. Recent studies have attempted to address this limitation through various approaches, among which increasing reflective diversity has shown promise. Our empirical analysis reveals a strong positive correlation between reflective diversity and task success, further motivating the need for diverse reflection signals. We introduce ParamMem, a parametric memory module that encodes cross-sample reflection patterns into model parameters, enabling diverse reflection generation through temperature-controlled sampling. Building on this module, we propose ParamAgent, a reflection-based agent framework that integrates parametric memory with episodic and cross-sample memory. Extensive experiments on code generation, mathematical reasoning, and multi-hop question answering demonstrate consistent improvements over state-of-the-art baselines. Further analysis reveals that ParamMem is sample-efficient, enables weak-to-strong transfer across model scales, and supports self-improvement without reliance on stronger external model, highlighting the potential of ParamMem as an effective component for enhancing language agents.",
+        "tag": "Agent 记忆",
+        "success": true,
+        "file_path": "./output/2026-02-26/papers\\2602.23320v1【Agent 记忆-卡内基梅隆大学】ParamMem_ Augmenting Language Agents with Parametric Reflective Memory.pdf",
+        "institution_status": "keep",
+        "institution": "卡内基梅隆大学、Mohamed bin Zayed University of Artificial Intelligence、Georgia Institute of Technology",
+        "first_institution": "卡内基梅隆大学",
+        "institution_category": "国外学术界",
+        "note": "📖标题：ParamMem: Augmenting Language Agents with Parametric Reflective Memory\n🌐来源：arXiv, 2602.23320v1\n\n笔记标题：参数化记忆增强反思多样性\n\n🛎️文章简介  \n🔸研究问题：如何进一步扩大语言代理的反思多样性以提升推理性能？  \n🔸主要贡献：提出ParamMem——一种将跨样本反思模式编码进模型参数的轻量级参数化记忆模块，通过温度控制采样生成多样化反思信号，显著提升语言代理的推理能力。\n\n📝重点思路  \n🔸构建辅助反思数据集D={(x_i, rg_i)}，其中rg_i由强LLM（如GPT-4o-mini）对输入x_i生成的结构化反思（编程任务含错误枚举、数学任务含推导陷阱、多跳QA含语义分解单元）构成。  \n🔸采用LoRA高效微调轻量LLM（如Llama-3.1-8B）作为ParamMem模块M_g，使其隐式学习跨样本反思规律，而非依赖提示模板或检索相似样本。  \n🔸在反射框架中，每轮迭代除使用历史自反思r_{1:k−1}外，额外采样ParamMem输出rg_k（温度T=0.2首轮、T=1.0后续轮），与actor模型联合条件生成y_k。  \n🔸提出ParamAgent（融合时序记忆+参数化记忆）和ParamAgent-plus（三重记忆：时序+跨样本+参数化），统一建模不同记忆源的互补性。  \n🔸支持无需外部强模型的自改进：用基模型自身生成的数据训练ParamMem，仍能持续提升性能；且小模型ParamMem可有效增强大模型agent（弱到强迁移）。\n\n🔎分析总结  \n🔸反思多样性（平均成对余弦距离）与任务准确率呈强正相关（平均r=0.76），验证提升多样性是关键优化方向。  \n🔸ParamMem显著增加反思聚类数（K*=39 vs Reflexion的32）与轮廓系数，证明其引入了独立于时序/跨样本记忆的新颖语义多样性层。  \n🔸多样反思扩展了错误诊断的假设空间，使agent更可能捕获正确修正线索，尤其在Reflexion/DoT失败案例中体现明显。  \n🔸仅需约500个K-means采样的多样样本即可达到优异性能，ParamAgent-plus用500样本即超越用8000样本训练的ParamAgent，凸显样本效率。  \n🔸ParamMem支持弱到强迁移：8B ParamMem可提升70B基模型性能；且无需强模型标注，仅用基模型自产数据即可实现自我改进。\n\n💡个人观点  \n论文创新点在于跳出“提示工程”与“检索增强”的传统范式，首次将反思多样性建模为可学习的参数化记忆，以轻量微调方式内化跨样本共性模式。其核心洞见是：多样性本质是泛化能力，而非简单检索或随机扰动；ParamMem通过参数化编码实现模式插值与外推，兼具高效性、可迁移性与自持性，为构建可持续进化的语言代理提供了新基础设施。\n    "
+    },
+    {
+        "title": "Scale Can't Overcome Pragmatics: The Impact of Reporting Bias on Vision-Language Reasoning",
+        "authors": [
+            "Amita Kamath",
+            "Jack Hessel",
+            "Khyathi Chandu",
+            "Jena D. Hwang",
+            "Kai-Wei Chang",
+            "Ranjay Krishna"
+        ],
+        "categories": [
+            "cs.CL",
+            "cs.CV"
+        ],
+        "published_date": "2026-02-26",
+        "arxiv_id": "2602.23351v1",
+        "pdf_url": "https://arxiv.org/pdf/2602.23351v1",
+        "summary": "The lack of reasoning capabilities in Vision-Language Models (VLMs) has remained at the forefront of research discourse. We posit that this behavior stems from a reporting bias in their training data. That is, how people communicate about visual content by default omits tacit information needed to supervise some types of reasoning; e.g., \"at the game today!\" is a more likely caption than \"a photo of 37 people standing behind a field\". We investigate the data underlying the popular VLMs OpenCLIP, LLaVA-1.5 and Molmo through the lens of theories from pragmatics, and find that reporting bias results in insufficient representation of four reasoning skills (spatial, temporal, negation, and counting), despite the corpora being of web-scale, and/or synthetically generated. With a set of curated benchmarks, we demonstrate that: (i) VLMs perform poorly on the aforementioned types of reasoning suppressed in the training data by reporting bias; (ii) contrary to popular belief, scaling data size, model size, and to multiple languages does not result in emergence of these skills by default; but, promisingly, (iii) incorporating annotations specifically collected to obtain tacit information is effective. Our findings highlight the need for more intentional training data curation methods, rather than counting on scale for emergence of reasoning capabilities.",
+        "tag": "训练数据偏差",
+        "success": true,
+        "file_path": "./output/2026-02-26/papers\\2602.23351v1【训练数据偏差-华盛顿大学】Scale Can't Overcome Pragmatics_ The Impact of Reporting Bias on Vision-Language Reasoning.pdf",
+        "institution_status": "keep",
+        "institution": "华盛顿大学、加州大学洛杉矶分校、Samaya AI、Mistral AI、AllenAI",
+        "first_institution": "华盛顿大学",
+        "institution_category": "国外学术界",
+        "note": "📖标题：Scale Can't Overcome Pragmatics: The Impact of Reporting Bias on Vision-Language Reasoning\n🌐来源：arXiv, 2602.23351v1\n\n笔记标题：报告偏差阻碍视觉语言推理\n\n🛎️文章简介  \n🔸研究问题：为什么当前大规模视觉语言模型在空间、时间、否定和计数等基础推理任务上表现远逊于人类，即使数据和模型规模持续扩大？  \n🔸主要贡献：首次系统揭示并验证了“报告偏差”——人类在描述图像时系统性省略隐含推理信息——是导致VLM推理能力缺失的根本原因，并证明单纯扩大规模无法克服该偏差。\n\n📝重点思路  \n🔸基于语用学（Grice会话准则）和认知语言学理论，提出四类被普遍省略的推理类型：空间关系（如“左/右”）、时间顺序（如“之前/之后”）、否定表达（如“没有……”）和精确计数。  \n🔸通过关键词检索与人工校验，在LAION、LLaVA-1.5、Molmo等三大开源多模态数据集上实证四类推理表达的出现率极低（如LAION中空间关系仅约0.1%），证实报告偏差普遍存在。  \n🔸构建四个针对性基准（Spatial/Counting/Negation/Temporal），统一采用多选题图像-文本匹配范式，覆盖对比式与生成式VLM，实现跨模型公平评估。  \n🔸设计受控用户实验：固定COCO图像集，对比不同标注指令（COCO原指令、LLaVA、PixMo及本文新指令）对四类推理表达产出率的影响，验证指令可定向缓解偏差。  \n🔸开展微调实验，将按新指令生成的高推理密度数据（39%计数）注入LLaVA-1.5训练，证实其显著提升模型计数性能，验证数据干预的有效性。\n\n🔎分析总结  \n🔸所有主流VLM（包括CLIP系列、LLaVA、Molmo、Qwen-VL及闭源GPT-4o/Gemini）在四类推理任务上平均落后人类性能达54分，尤其否定任务接近随机水平。  \n🔸模型与数据规模扩大（参数量、数据量、多语言翻译）均未带来推理能力的“涌现”，缩放定律显示损失几乎不随计算量增加而下降，证明偏差本质是数据生成机制问题而非规模不足。  \n🔸报告偏差同样存在于LLM合成数据（如LLaVA-1.5中GPT-4生成部分），说明语言模型继承并放大了人类偏差，指令设计对合成数据同样关键。  \n🔸标注指令直接影响推理表达密度：本文新指令使否定与时间表达率从0%跃升至52%和44%，而仅延长字数（50词）无法激发被默认忽略的推理类型。  \n🔸训练数据中推理概念的真实覆盖率与模型性能呈强正相关，且微调实验证明，提升覆盖率可直接改善模型能力，确认偏差是可干预的数据质量问题。\n\n💡个人观点  \n论文创新点在于将语言学中的“报告偏差”理论首次深度迁移到多模态领域，不仅指出问题，更通过跨学科理论建模、多维度实证检验与可复现干预实验，确立了“数据生成机制缺陷”比“模型架构限制”更根本的归因；其核心洞见——“人类交流的经济性原则天然排斥推理冗余，因此必须主动设计数据采集规则”——为多模态基础模型发展提供了范式级启示：高质量推理能力无法靠规模堆砌，而需在数据源头嵌入认知意识。\n    "
+    },
+    {
+        "title": "Strategy Executability in Mathematical Reasoning: Leveraging Human-Model Differences for Effective Guidance",
+        "authors": [
+            "Weida Liang",
+            "Yiyou Sun",
+            "Shuyuan Nan",
+            "Chuang Li",
+            "Dawn Song",
+            "Kenji Kawaguchi"
+        ],
+        "categories": [
+            "cs.AI",
+            "cs.CL"
+        ],
+        "published_date": "2026-02-26",
+        "arxiv_id": "2602.22583v1",
+        "pdf_url": "https://arxiv.org/pdf/2602.22583v1",
+        "summary": "Example-based guidance is widely used to improve mathematical reasoning at inference time, yet its effectiveness is highly unstable across problems and models-even when the guidance is correct and problem-relevant. We show that this instability arises from a previously underexplored gap between strategy usage-whether a reasoning strategy appears in successful solutions-and strategy executability-whether the strategy remains effective when instantiated as guidance for a target model. Through a controlled analysis of paired human-written and model-generated solutions, we identify a systematic dissociation between usage and executability: human- and model-derived strategies differ in structured, domain-dependent ways, leading to complementary strengths and consistent source-dependent reversals under guidance. Building on this diagnosis, we propose Selective Strategy Retrieval (SSR), a test-time framework that explicitly models executability by selectively retrieving and combining strategies using empirical, multi-route, source-aware signals. Across multiple mathematical reasoning benchmarks, SSR yields reliable and consistent improvements over direct solving, in-context learning, and single-source guidance, improving accuracy by up to $+13$ points on AIME25 and $+5$ points on Apex for compact reasoning models. Code and benchmark are publicly available at: https://github.com/lwd17/strategy-execute-pipeline.",
+        "tag": "推理策略优化",
+        "success": true,
+        "file_path": "./output/2026-02-26/papers\\2602.22583v1【推理策略优化-新加坡国立大学】Strategy Executability in Mathematical Reasoning_ Leveraging Human-Model Differences for Effective Guidance.pdf",
+        "institution_status": "keep",
+        "institution": "新加坡国立大学、加州大学伯克利分校",
+        "first_institution": "新加坡国立大学",
+        "institution_category": "国外学术界",
+        "note": "📖标题：Strategy Executability in Mathematical Reasoning: Leveraging Human-Model Differences for Effective Guidance\n🌐来源：arXiv, 2602.22583v1\n\n笔记标题：策略可执行性建模\n\n🛎️文章简介  \n🔸研究问题：为什么正确且相关的问题求解策略在作为推理引导时仍常失效？  \n🔸主要贡献：提出“策略可执行性”新概念，揭示策略在人类解法中出现与在模型上成功引导之间的系统性脱节，并据此设计轻量级测试时框架SSR。\n\n📝重点思路  \n🔸定义策略可执行性为策略在固定提示与解码条件下提升目标模型正确率的能力，区别于单纯统计策略在成功解法中的出现频率（即策略使用）。  \n🔸构建HM-ReasoningBench配对数据集，系统分析人类与模型解法在策略使用上的结构化差异：人类偏好结构/几何类策略（如辅助线、对称性），模型倾向程序/代数类策略（如坐标设定、分情况讨论）。  \n🔸发现策略来源与领域强耦合：人类策略在几何/组合题中更可执行，模型策略在代数/数论题中更可靠，单一来源引导易失败。  \n🔸提出Selective Strategy Retrieval（SSR）：基于异构策略知识图建模，融合三路检索——类别级规律（Route A）、问题级迁移（Route B）、语义回退（Route C），并用Beta-Binomial校准的可执行性预测器排序策略。  \n🔸SSR纯测试时运行，无需修改模型或训练数据，仅以抽象策略提示（非步骤细节）引导，保持灵活性同时匹配模型操作优势。\n\n🔎分析总结  \n🔸策略使用频率不能预测其可执行性：高频人类策略（如角追逐）在模型上常不可靠，而低频模型策略（如坐标设定）反而更易执行。  \n🔸可执行性具有强源依赖性与领域特异性：在几何题中，人类策略平均可执行性显著高于模型策略；在代数题中则相反。  \n🔸SSR在多个基准（HM-ReasoningBench、AIME25、APEX）上稳定超越直接求解、上下文学习及单源策略引导，最高提升13点准确率（AIME25），且在难题上增益更大。  \n🔸消融实验证明三路检索均必要：移除问题级迁移（Route B）导致最大性能下降，凸显细粒度上下文适配的关键作用。  \n🔸错误模式分析表明：人类策略主要缓解结构性失败（如漏分解、缺不变量），模型策略更擅修正代数计算错误，SSR二者兼顾。\n\n💡个人观点  \n论文核心创新在于将“策略有效性”从静态语义正确性转向动态操作可行性，首次将人类与模型的认知差异建模为可执行性信号源。其方法论突破体现在三方面：一是提出可执行性这一可测量、可校准的操作性指标；二是构建首个带人类/模型双源解法的策略级配对基准HM-ReasoningBench；三是设计源感知、多路径、图增强的轻量级检索框架SSR，不增加推理开销却显著提升鲁棒性。该视角有望推动推理评估从“答案对错”迈向“中间抽象是否可用”。\n    "
+    },
+    {
+        "title": "dLLM: Simple Diffusion Language Modeling",
+        "authors": [
+            "Zhanhui Zhou",
+            "Lingjie Chen",
+            "Hanghang Tong",
+            "Dawn Song"
+        ],
+        "categories": [
+            "cs.CL",
+            "cs.AI",
+            "cs.LG"
+        ],
+        "published_date": "2026-02-26",
+        "arxiv_id": "2602.22661v1",
+        "pdf_url": "https://arxiv.org/pdf/2602.22661v1",
+        "summary": "Although diffusion language models (DLMs) are evolving quickly, many recent models converge on a set of shared components. These components, however, are distributed across ad-hoc research codebases or lack transparent implementations, making them difficult to reproduce or extend. As the field accelerates, there is a clear need for a unified framework that standardizes these common components while remaining flexible enough to support new methods and architectures.\n  To address this gap, we introduce dLLM, an open-source framework that unifies the core components of diffusion language modeling -- training, inference, and evaluation -- and makes them easy to customize for new designs. With dLLM, users can reproduce, finetune, deploy, and evaluate open-source large DLMs such as LLaDA and Dream through a standardized pipeline. The framework also provides minimal, reproducible recipes for building small DLMs from scratch with accessible compute, including converting any BERT-style encoder or autoregressive LM into a DLM. We also release the checkpoints of these small DLMs to make DLMs more accessible and accelerate future research.",
+        "tag": "扩散语言模型框架",
+        "success": true,
+        "file_path": "./output/2026-02-26/papers\\2602.22661v1【扩散语言模型框架-加州大学伯克利分校】dLLM_ Simple Diffusion Language Modeling.pdf",
+        "institution_status": "keep",
+        "institution": "加州大学伯克利分校、伊利诺伊大学厄巴纳 - 香槟分校",
+        "first_institution": "加州大学伯克利分校",
+        "institution_category": "国外学术界",
+        "note": "📖标题：dLLM: Simple Diffusion Language Modeling\n🌐来源：arXiv, 2602.22661v1\n\n笔记标题：统一扩散语言建模框架\n\n🛎️文章简介  \n🔸研究问题：如何解决当前扩散语言模型（DLMs）因代码分散、实现不透明而导致的复现难、比较难、扩展难问题？  \n🔸主要贡献：提出了dLLM——首个开源、模块化、端到端统一的扩散语言建模框架，涵盖训练、推理与评估全流程，并提供轻量级从零构建和模型转换方案。\n\n📝重点思路  \n🔸设计统一Trainer接口，支持Masked Diffusion（MDLM）和Block Diffusion（BD3LM）等主流目标，通过模块化封装（如MDLMTrainer/BD3LMTrainer）实现训练逻辑与模型架构解耦。  \n🔸构建轻量级Sampler抽象层，以plug-and-play方式解耦模型与推理算法，支持Fast-dLLM等高效解码器无缝替换，无需修改模型代码。  \n🔸扩展lm-evaluation-harness，构建高保真评估管道，严格复现各模型官方预处理、解码参数与后处理流程，确保结果可比性。  \n🔸提供两类“开箱即用”的小规模DLM构建路径：一是将BERT式编码器微调为对话型DLM（BERT-Chat），二是将自回归LM（如Qwen）通过SFT直接转为DLM（Tiny-A2D），均无需架构修改或持续预训练。  \n🔸所有组件基于HuggingFace生态（Transformers、Accelerate、PEFT、DeepSpeed），兼顾易用性与大模型可扩展性。\n\n🔎分析总结  \n🔸dLLM成功复现LLaDA与Dream等主流DLM的官方评测结果（误差<1.5%），验证了其评估管道的高保真性。  \n🔸Fast-dLLM在dLLM中实现后，推理速度提升最高达11×，且精度基本无损，证实框架对高效算法的良好支持。  \n🔸MDLM微调可显著提升大DLM的推理能力（如LLaDA-Instruct在GSM8K上+0.68%），但Base模型在OOD任务上存在退化现象，提示SFT需任务适配。  \n🔸BERT-Chat在零架构改动下超越GPT-2系列，证明编码器结构具备生成潜力；Tiny-A2D中BD3LM变体在HumanEval上反超原AR基线，验证块扩散对代码生成的优势。  \n🔸所有小DLM均仅需单阶段SFT完成转换，训练成本低（如BERT-Chat用8×A100训练10轮），大幅降低DLM入门门槛。\n\n💡个人观点  \n该工作核心创新在于系统性工程抽象：不是提出新模型，而是识别出DLM研究中重复造轮的共性痛点（训练目标碎片化、推理API不一致、评测不可控），并以工业级软件工程思维构建标准化接口。其“最小可行转换”理念（如AR→DLM仅需几行配置变更）极具实践价值，真正推动DLM从实验室原型走向可复现、可迭代、可共享的开放科研范式。\n    "
+    }
+]

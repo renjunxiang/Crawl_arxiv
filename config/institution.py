@@ -42,6 +42,7 @@ foreign_industry = {
     #     "Apple Inc",
     #     "Apple Intelligence",
     # ],  # 新增：苹果大模型相关（Apple Intelligence为其AI品牌）
+    # "虾皮": ["Shopee", "Sea Limited", "Shopee AI"],  # 新增：虾皮（Sea集团旗下）
 }
 # 国内公司
 domestic_industry = {
@@ -55,10 +56,9 @@ domestic_industry = {
     "华为": ["Huawei", "Huawei Technologies", "PanGu"],  # 华为盘古大模型x
     "百度": ["Baidu", "Baidu Inc", "ERNIE"],  # 文心一言（ERNIE）是百度核心大模型
     "美团": ["Meituan", "Meituan Dianping", "美团大模型"],  # longcat
-    # "虾皮": ["Shopee", "Sea Limited", "Shopee AI"],  # 新增：虾皮（Sea集团旗下）
     # "快手": ["Kuaishou", "Kuaishou Technology", "快手AI"],  # 新增：快手
-    # "商汤科技": ["SenseTime", "SenseTime Group"],  # 商汤日日新大模型
-    # "科大讯飞": ["iFLYTEK", "iFLYTEK Co., Ltd", "Spark"],  # 讯飞星火大模型
+    "商汤科技": ["SenseTime", "SenseTime Group"],  # 商汤日日新大模型
+    "科大讯飞": ["iFLYTEK", "iFLYTEK Co., Ltd", "Spark"],  # 讯飞星火大模型
     # "中国电信": [
     #     "China Telecom",
     #     "China Telecom Corporation",
@@ -71,10 +71,10 @@ foreign_academia = {
     "斯坦福大学": ["Stanford University"],
     "卡内基梅隆大学": ["Carnegie Mellon University", "CMU"],  # 补充简称CMU
     "加州大学伯克利分校": ["University of California, Berkeley", "UC Berkeley", "UCB"],
-    "普林斯顿大学": ["Princeton University"],
     "华盛顿大学": ["University of Washington", "UW"],
-    "南洋理工大学": ["Nanyang Technological University", "NTU"],
     "新加坡国立大学": ["National University of Singapore", "NUS"],
+    # "普林斯顿大学": ["Princeton University"],
+    # "南洋理工大学": ["Nanyang Technological University", "NTU"],
     # "加州大学圣地亚哥分校": ["University of California, San Diego", "UCSD"],
     # "伊利诺伊大学香槟分校": ["University of Illinois at Urbana-Champaign", "UIUC"],
     # "哥伦比亚大学": ["Columbia University"],
@@ -94,15 +94,15 @@ domestic_academia = {
     "北京大学": ["Peking University", "PKU"],
     "复旦大学": ["Fudan University", "FDU"],  # 复旦：大模型多模态/自然语言处理研究核心
     "上海交通大学": ["Shanghai Jiao Tong University", "SJTU"],
-    "中国人民大学": ["Renmin University of China", "RUC"],  # 新增：人大
-    "中国科学技术大学": ["University of Science and Technology of China", "USTC"],
     "浙江大学": ["Zhejiang University", "ZJU"],
+    "哈尔滨工业大学": ["Harbin Institute of Technology", "HIT"],
+    "中国科学技术大学": ["University of Science and Technology of China", "USTC"],
+    "中国人民大学": ["Renmin University of China", "RUC"],  # 新增：人大
     # "南京大学": [
     #     "Nanjing University",
     #     "NJU",
     # ],  # 南大：自然语言处理/大模型推理优化领域领先
     # "西安交通大学": ["Xi'an Jiaotong University", "XJTU"],
-    # "哈尔滨工业大学": ["Harbin Institute of Technology", "HIT"],
     # "中国科学院": [
     #     "Chinese Academy of Sciences",
     #     "CAS",
@@ -112,7 +112,7 @@ domestic_academia = {
     #     "UCAS",
     # ],  # 国科大：依托中科院的顶尖研究型大学
     "香港科技大学": ["Hong Kong University of Science and Technology", "HKUST"],
-    # "香港中文大学": ["The Chinese University of Hong Kong", "CUHK"],
+    "香港中文大学": ["The Chinese University of Hong Kong", "CUHK"],
     # "香港大学": ["The University of Hong Kong", "HKU"],  # 港大：论文中常用HKU简称
     # "香港理工大学": [
     #     "The Hong Kong Polytechnic University",

@@ -4,6 +4,7 @@ from tools.filter_paper import FilterPaper
 from tools.download_paper import DownloadPaper
 from tools.filter_institution import find_institution_batch
 from tools.write_note import write_notes
+from tools.prepare_materials import write_copy, pdf_first_page_to_image
 import argparse
 
 parser = argparse.ArgumentParser(description="Process some integers.")
@@ -35,7 +36,7 @@ async def main(date: str, filter_llm: str, institution_llm: str, note_llm: str):
     else:
         categories = ["cs.CL", "cs.AI", "cs.LG", "cs.IR", "cs.CV"]
         papers = find_arxiv_papers(
-            categories, start_time=date, end_time=date, max_results=2000
+            categories, start_time=date, end_time=date, max_results=1000
         )
         print(f"查询到 {len(papers)} 篇论文\n")
         # 指定日期的论文清单
@@ -48,7 +49,7 @@ async def main(date: str, filter_llm: str, institution_llm: str, note_llm: str):
         with open(f"./output/{date}/papers_filter.json", "r", encoding="utf-8") as f:
             papers_filter = json.load(f)
     else:
-        filter = FilterPaper(model_name=filter_llm, max_concurrent=10)
+        filter = FilterPaper(model_name=filter_llm, max_concurrent=5)
         results = await filter.process_batch_llm(papers[:])
         papers_filter = []
         for res in results:
@@ -112,6 +113,7 @@ async def main(date: str, filter_llm: str, institution_llm: str, note_llm: str):
                 pending_papers,
                 institution_llm,
                 downloaded_json_path=downloaded_json_path,
+                max_concurrent=5,
             )
             # 重新加载更新后的 download_info
             with open(downloaded_json_path, "r", encoding="utf-8") as f:
@@ -136,9 +138,10 @@ async def main(date: str, filter_llm: str, institution_llm: str, note_llm: str):
         with open(f"./output/{date}/notes.json", "r", encoding="utf-8") as f:
             notes = json.load(f)
     else:
-        notes = await write_notes(filter_institution, note_llm)
+        notes = await write_notes(filter_institution, note_llm, max_concurrent=5)
         print(f"写好 {len(notes)} 篇论文的笔记")
-        # 满足条件的论文笔记
+        # 满足条件的论文笔记，按照title排序
+        notes.sort(key=lambda x: x["title"])
         with open(f"./output/{date}/notes.json", "w", encoding="utf-8") as f:
             json.dump(notes, f, ensure_ascii=False, indent=4)
 
@@ -153,8 +156,7 @@ async def main(date: str, filter_llm: str, institution_llm: str, note_llm: str):
     if not os.path.exists(f"./output/{date}/institution"):
         os.makedirs(f"./output/{date}/institution")
 
-    foreign_industry, domestic_industry, foreign_academia, domestic_academia, other = (
-        [],
+    industry, foreign_academia, domestic_academia, other = (
         [],
         [],
         [],
@@ -162,9 +164,9 @@ async def main(date: str, filter_llm: str, institution_llm: str, note_llm: str):
     )
     for note in notes:
         if note["institution_category"] == "国外工业界":
-            foreign_industry.append(note)
+            industry.append(note)
         elif note["institution_category"] == "国内工业界":
-            domestic_industry.append(note)
+            industry.append(note)
         elif note["institution_category"] == "国外学术界":
             foreign_academia.append(note)
         elif note["institution_category"] == "国内学术界":
@@ -172,75 +174,77 @@ async def main(date: str, filter_llm: str, institution_llm: str, note_llm: str):
         else:
             other.append(note)
 
-    with open(
-        f"./output/{date}/institution/foreign_industry.json", "w", encoding="utf-8"
-    ) as f:
-        json.dump(foreign_industry, f, ensure_ascii=False, indent=4)
-        print(f"合计 {len(foreign_industry)} 篇国外工业界的论文笔记")
-    with open(
-        f"./output/{date}/institution/domestic_industry.json", "w", encoding="utf-8"
-    ) as f:
-        json.dump(domestic_industry, f, ensure_ascii=False, indent=4)
-        print(f"合计 {len(domestic_industry)} 篇国内工业界的论文笔记")
-    with open(
-        f"./output/{date}/institution/foreign_academia.json", "w", encoding="utf-8"
-    ) as f:
-        json.dump(foreign_academia, f, ensure_ascii=False, indent=4)
-        print(f"合计 {len(foreign_academia)} 篇国外学术界的论文笔记")
-    with open(
-        f"./output/{date}/institution/domestic_academia.json", "w", encoding="utf-8"
-    ) as f:
-        json.dump(domestic_academia, f, ensure_ascii=False, indent=4)
-        print(f"合计 {len(domestic_academia)} 篇国内学术界的论文笔记")
-    with open(f"./output/{date}/institution/other.json", "w", encoding="utf-8") as f:
-        json.dump(other, f, ensure_ascii=False, indent=4)
-        print(f"合计 {len(other)} 篇其他机构的论文笔记")
+    for file_name, notes in [
+        ("industry", industry),
+        ("foreign_academia", foreign_academia),
+        ("domestic_academia", domestic_academia),
+        ("other", other),
+    ]:
+        if not os.path.exists(f"./output/{date}/institution/{file_name}"):
+            os.makedirs(f"./output/{date}/institution/{file_name}")
+        # 保存 JSON 文件
+        with open(
+            f"./output/{date}/institution/{file_name}/{file_name}.json",
+            "w",
+            encoding="utf-8",
+        ) as f:
+            json.dump(notes, f, ensure_ascii=False, indent=4)
+            print(f"合计 {len(notes)} 篇{file_name}的论文笔记")
+        # 保存笔记txt文件
+        with open(
+            f"./output/{date}/institution/{file_name}/{file_name}.txt",
+            "w",
+            encoding="utf-8",
+        ) as f:
+            for note in notes:
+                f.write("=" * 30 + "\n\n")
+                f.write(note["institution"] + "\n\n")
+                f.write(note["note"] + "\n\n")
 
-    with open(
-        f"./output/{date}/institution/foreign_industry.txt", "w", encoding="utf-8"
-    ) as f:
-        for note in foreign_industry:
-            f.write("=" * 30 + "\n\n")
-            f.write(note["institution"] + "\n\n")
-            f.write(note["note"] + "\n\n")
+    # =================================生成素材=================================
+    image_id = 0
+    for file_name, notes in [
+        ("industry", industry),
+        ("foreign_academia", foreign_academia),
+        ("domestic_academia", domestic_academia),
+        ("other", other),
+    ]:
+        # 按照机构归类论文简介
+        contents = {}
+        for note in notes:
+            first_institution = note["first_institution"]
+            pdf_path = note["file_path"]
+            arxiv_id = note["arxiv_id"]
+            content = write_copy(note)
+            if first_institution not in contents:
+                contents[first_institution] = []
+            contents[first_institution].append([content, pdf_path, arxiv_id])
 
-    with open(
-        f"./output/{date}/institution/domestic_industry.txt", "w", encoding="utf-8"
-    ) as f:
-        for note in domestic_industry:
-            f.write("=" * 30 + "\n\n")
-            f.write(note["institution"] + "\n\n")
-            f.write(note["note"] + "\n\n")
-
-    with open(
-        f"./output/{date}/institution/foreign_academia.txt", "w", encoding="utf-8"
-    ) as f:
-        for note in foreign_academia:
-            f.write("=" * 30 + "\n\n")
-            f.write(note["institution"] + "\n\n")
-            f.write(note["note"] + "\n\n")
-
-    with open(
-        f"./output/{date}/institution/domestic_academia.txt", "w", encoding="utf-8"
-    ) as f:
-        for note in domestic_academia:
-            f.write("=" * 30 + "\n\n")
-            f.write(note["institution"] + "\n\n")
-            f.write(note["note"] + "\n\n")
-    with open(f"./output/{date}/institution/other.txt", "w", encoding="utf-8") as f:
-        for note in other:
-            f.write("=" * 30 + "\n\n")
-            f.write(note["institution"] + "\n\n")
-            f.write(note["note"] + "\n\n")
+        # 生成论文首页图片并按照简介顺序排序，方便后续直接上传笔记
+        with open(
+            f"./output/{date}/institution/{file_name}/content.txt",
+            "w",
+            encoding="utf-8",
+        ) as f:
+            for institution, contents in contents.items():
+                f.write(f"\n🛎️{institution}\n")
+                for [content, pdf_path, arxiv_id] in contents:
+                    f.write(content + "\n")
+                    pdf_first_page_to_image(
+                        pdf_path=pdf_path,
+                        output_img_path=f"./output/{date}/institution/{file_name}/{image_id}_{arxiv_id}.png",
+                        dpi=300,
+                        img_format="png",
+                    )
+                    image_id += 1
 
 
 if __name__ == "__main__":
     import asyncio
 
     model_name = {
-        "filter": "qwen-plus",
-        # "institution": "qwen2.5-72b-instruct",
-        "institution": "qwen-plus",
+        "filter": "qwen3.5-plus",
+        "institution": "qwen3.5-plus",
         "note": "qwen-plus",
     }
 

@@ -1,0 +1,285 @@
+[
+    {
+        "title": "AuditBench: Evaluating Alignment Auditing Techniques on Models with Hidden Behaviors",
+        "authors": [
+            "Abhay Sheshadri",
+            "Aidan Ewart",
+            "Kai Fronsdal",
+            "Isha Gupta",
+            "Samuel R. Bowman",
+            "Sara Price",
+            "Samuel Marks",
+            "Rowan Wang"
+        ],
+        "categories": [
+            "cs.CL"
+        ],
+        "published_date": "2026-02-26",
+        "arxiv_id": "2602.22755v1",
+        "pdf_url": "https://arxiv.org/pdf/2602.22755v1",
+        "summary": "We introduce AuditBench, an alignment auditing benchmark. AuditBench consists of 56 language models with implanted hidden behaviors. Each model has one of 14 concerning behaviors--such as sycophantic deference, opposition to AI regulation, or secret geopolitical loyalties--which it does not confess to when directly asked. AuditBench models are highly diverse--some are subtle, while others are overt, and we use varying training techniques both for implanting behaviors and training models not to confess. To demonstrate AuditBench's utility, we develop an investigator agent that autonomously employs a configurable set of auditing tools. By measuring investigator agent success using different tools, we can evaluate their efficacy. Notably, we observe a tool-to-agent gap, where tools that perform well in standalone non-agentic evaluations fail to translate into improved performance when used with our investigator agent. We find that our most effective tools involve scaffolded calls to auxiliary models that generate diverse prompts for the target. White-box interpretability tools can be helpful, but the agent performs best with black-box tools. We also find that audit success varies greatly across training techniques: models trained on synthetic documents are easier to audit than models trained on demonstrations, with better adversarial training further increasing auditing difficulty. We release our models, agent, and evaluation framework to support future quantitative, iterative science on alignment auditing.",
+        "tag": "安全对齐",
+        "success": true,
+        "file_path": "./output/2026-02-26/papers\\2602.22755v1【安全对齐-Anthropic】AuditBench_ Evaluating Alignment Auditing Techniques on Models with Hidden Behaviors.pdf",
+        "institution_status": "keep",
+        "institution": "Anthropic",
+        "first_institution": "Anthropic",
+        "institution_category": "国外工业界",
+        "note": "📖标题：AuditBench: Evaluating Alignment Auditing Techniques on Models with Hidden Behaviors\n🌐来源：arXiv, 2602.22755v1\n\n笔记标题：构建可复现的对齐审计基准\n\n🛎️文章简介  \n🔸研究问题：如何系统评估不同对齐审计技术在识别模型隐藏行为时的有效性？  \n🔸主要贡献：提出了首个大规模、多样化、带可控隐藏行为的语言模型基准AuditBench，并基于其首次实证揭示了“工具到代理”效能断层等关键规律。\n\n📝重点思路  \n🔸构建56个高多样性目标模型，覆盖14类真实关切的隐藏行为（如秘密地缘忠诚、反对AI监管），通过两种行为植入方式（对话蒸馏 vs 合成文档微调）与两种对抗训练策略（SFT vs KTO）交叉生成。  \n🔸设计可配置的 investigator agent，支持黑盒（如预填充、用户角色采样）、白盒（如稀疏自编码器、激活神谕）及 scaffolded 黑盒三类审计工具，并以多轮交互+最终行为预测为统一评估范式。  \n🔸引入“工具到代理差距”分析框架，区分工具在静态评测中能否输出证据 vs 代理能否有效利用该证据形成正确假设，并归因于工具使用不足、信噪比低、证据-假设转化难三类问题。  \n🔸采用分层迭代开发流程：先用轻量级静态代理（single-turn/强证据）快速筛选工具变体，再在完整agent上验证，显著提升工具研发效率。  \n🔸全面控制变量：在相同基座模型（Llama 3.3 70B）上系统对比不同训练配置对审计难度的影响，避免结论依赖单一方法。\n\n🔎分析总结  \n🔸scaffolded黑盒工具（如scaffolded用户采样）整体表现最优，尤其在合成文档微调模型上效果突出；但其优势高度依赖scaffolding——原始黑盒工具（如普通预填充）几乎无增益。  \n🔸白盒工具（如激活神谕、SAEs）在部分模型（SDF+SFT）上提供可观信号（如Anti-AI Regulation检测率从0%升至88%），但在更鲁棒的模型（TD+KTO）上普遍失效，表明其有效性严重受限于模型训练方式。  \n🔸审计难度存在巨大差异：合成文档微调模型最易审计，而对话蒸馏+KTO对抗训练模型最难；且在简单模型上有效的工具，在困难模型上常反而损害性能，凸显跨配置评估必要性。  \n🔸存在显著“工具到代理差距”：例如SAEs能提取相关特征，但agent常无法据此聚焦提问，转而泛泛询问谜题或编程；Petri摘要虽能揭示多轮行为，却使agent过度依赖其输出而忽略独立探索。  \n🔸对抗训练显著降低模型“自白率”，KTO优于SFT；且SDF模型即使经对抗训练仍比TD模型更易自白，印证其内部表征更易被审计工具捕获。\n\n💡个人观点  \n论文创新点在于：首次将对齐审计从零散工具测试升维为可复现、可迭代、可量化的科学实验范式——通过精心构造的模型谱系（覆盖行为类型、植入方式、鲁棒性层级）和标准化代理评估框架，揭示了审计效能的本质条件性（非绝对优劣），并指出“工具设计”与“代理集成”是两个不可替代的关键环节，为后续研究提供了坚实基准与深刻方法论启示。\n    "
+    },
+    {
+        "title": "Exploratory Memory-Augmented LLM Agent via Hybrid On- and Off-Policy Optimization",
+        "authors": [
+            "Zeyuan Liu",
+            "Jeonghye Kim",
+            "Xufang Luo",
+            "Dongsheng Li",
+            "Yuqing Yang"
+        ],
+        "categories": [
+            "cs.LG",
+            "cs.AI"
+        ],
+        "published_date": "2026-02-26",
+        "arxiv_id": "2602.23008v1",
+        "pdf_url": "https://arxiv.org/pdf/2602.23008v1",
+        "summary": "Exploration remains the key bottleneck for large language model agents trained with reinforcement learning. While prior methods exploit pretrained knowledge, they fail in environments requiring the discovery of novel states. We propose Exploratory Memory-Augmented On- and Off-Policy Optimization (EMPO$^2$), a hybrid RL framework that leverages memory for exploration and combines on- and off-policy updates to make LLMs perform well with memory while also ensuring robustness without it. On ScienceWorld and WebShop, EMPO$^2$ achieves 128.6% and 11.3% improvements over GRPO, respectively. Moreover, in out-of-distribution tests, EMPO$^2$ demonstrates superior adaptability to new tasks, requiring only a few trials with memory and no parameter updates. These results highlight EMPO$^2$ as a promising framework for building more exploratory and generalizable LLM-based agents.",
+        "tag": "Agent 记忆",
+        "success": true,
+        "file_path": "./output/2026-02-26/papers\\2602.23008v1【Agent 记忆-微软】Exploratory Memory-Augmented LLM Agent via Hybrid On- and Off-Policy Optimization.pdf",
+        "institution_status": "keep",
+        "institution": "微软、卡内基梅隆大学",
+        "first_institution": "微软",
+        "institution_category": "国外工业界",
+        "note": "📖标题：Exploratory Memory-Augmented LLM Agent via Hybrid On- and Off-Policy Optimization\n🌐来源：arXiv, 2602.23008v1\n\n笔记标题：混合策略增强探索\n\n🛎️文章简介  \n🔸研究问题：如何解决大语言模型智能体在强化学习中因过度依赖先验知识而导致的系统性探索不足问题？  \n🔸主要贡献：提出EMPO2框架，通过记忆增强与混合（on-和off-policy）优化协同提升LLM智能体的探索能力与泛化性，在无需参数更新下即可快速适应新任务。\n\n📝重点思路  \n🔸设计双模 rollout 机制：在采样时动态切换“无记忆提示”与“记忆增强提示”，后者基于检索自建记忆库的反思性提示（tips）引导动作生成。  \n🔸构建双轨 update 机制：对记忆增强轨迹分别执行 on-policy 更新（保留提示条件）和 off-policy 更新（剥离提示、仅用状态-任务条件重算概率），实现外部引导向内在策略的知识蒸馏。  \n🔸引入自生成记忆模块：由策略自身在每轮结束时总结失败经验生成 tip，并存入非参数记忆缓冲区，支持跨轨迹连续反思与纠错。  \n🔸融合内在奖励机制：基于状态新颖性（余弦相似度阈值）提供稀疏内在奖励，维持策略熵并激励对未见状态的主动探索。  \n🔸采用 token 级重要性采样掩码：针对低概率 token 引发的训练不稳定问题，设定概率阈值δ屏蔽其优势项，提升 off-policy 训练鲁棒性。\n\n🔎分析总结  \n🔸EMPO2在ScienceWorld和WebShop上分别超越强基线GRPO达128.6%和11.3%，且训练曲线持续上升，避免GRPO早收敛至次优解。  \n🔸在OOD迁移实验中，仅需数次带记忆推理（零参数更新），EMPO2即显著优于GRPO，验证其记忆驱动的快速适应能力。  \n🔸消融实验证明：移除 off-policy 或 on-policy with memory 模块均导致性能下降，二者互补——前者加速知识内化，后者保障训练稳定性。  \n🔸内在奖励虽不影响最终性能上限，但移除后学习易早衰，证实其对维持探索多样性不可或缺。  \n🔸记忆机制带来约19%额外 rollout开销，但时间-性能曲线显示EMPO2仍显著优于GRPO，证明其探索效率增益远超计算成本。\n\n💡个人观点  \n论文创新点在于打破“记忆即辅助”的惯性思维，将记忆建模为可被策略自主生成、检索、蒸馏的动态认知 scaffold；通过 on/off-policy 的耦合设计，首次在LLM-RL中实现“记忆促进探索→探索生成高质量轨迹→轨迹反哺参数优化→参数吸收记忆价值”的闭环进化，兼顾短期适应性与长期泛化性。\n    "
+    },
+    {
+        "title": "Interpreting and Steering State-Space Models via Activation Subspace Bottlenecks",
+        "authors": [
+            "Vamshi Sunku Mohan",
+            "Kaustubh Gupta",
+            "Aneesha Das",
+            "Chandan Singh"
+        ],
+        "categories": [
+            "cs.LG"
+        ],
+        "published_date": "2026-02-26",
+        "arxiv_id": "2602.22719v1",
+        "pdf_url": "https://arxiv.org/pdf/2602.22719v1",
+        "summary": "State-space models (SSMs) have emerged as an efficient strategy for building powerful language models, avoiding the quadratic complexity of computing attention in transformers. Despite their promise, the interpretability and steerability of modern SSMs remain relatively underexplored. We take a major step in this direction by identifying activation subspace bottlenecks in the Mamba family of SSM models using tools from mechanistic interpretability. We then introduce a test-time steering intervention that simply multiplies the activations of the identified bottlenecks by a scalar. Across 5 SSMs and 6 diverse benchmarks, this intervention improves performance by an average of 8.27%, without requiring any task-specific tuning. Finally, we validate that the identified bottlenecks are indeed hindering performance by modifying them to yield an architecture we call Stable-Mamba, which achieves long-context performance gains when retrained from scratch.",
+        "tag": "SSM 架构优化",
+        "success": true,
+        "file_path": "./output/2026-02-26/papers\\2602.22719v1【SSM 架构优化-微软】Interpreting and Steering State-Space Models via Activation Subspace Bottlenecks.pdf",
+        "institution_status": "keep",
+        "institution": "微软、Amrita University",
+        "first_institution": "微软",
+        "institution_category": "国外工业界",
+        "note": "📖标题：Interpreting and Steering State-Space Models via Activation Subspace Bottlenecks\n🌐来源：arXiv, 2602.22719v1\n\n笔记标题：发现并干预状态空间瓶颈\n\n🛎️文章简介  \n🔸研究问题：如何提升状态空间模型（尤其是Mamba）的可解释性与可控性，使其在不牺牲效率的前提下克服长程推理与上下文学习的性能瓶颈？  \n🔸主要贡献：首次提出“激活子空间瓶颈”概念，系统识别Mamba中由dt_proj.bias主导的层级信息压缩瓶颈，并通过轻量级激活缩放干预和架构改进Stable-Mamba，显著提升多任务性能且无需任务微调。\n\n📝重点思路  \n🔸基于机械可解释性工具（SPD参数分解、稀疏自编码器SAE、隐式注意力映射），定量定位Mamba第20层的激活子空间瓶颈，核心证据为该层熵峰值、高KL散度及dt_proj.bias的冻结梯度特性。  \n🔸定义Delta敏感子空间：利用SSM中Δ参数调控时序更新的机制，筛选对输入变化响应剧烈的隐藏状态子空间，作为可干预的关键路径。  \n🔸设计零样本后处理干预：仅在推理时对第20层中668个Delta敏感子空间按重要性分组（435个降损>2%者×5倍放大，155个中性者×2倍），不修改权重、不重训练。  \n🔸构建Stable-Mamba架构：在保留SSM核心前提下，引入多时间尺度状态更新、稀疏全局上下文注入、集成门控等7项轻量修改，新增仅256参数，针对性缓解单一时序尺度与线性状态演化限制。  \n🔸验证瓶颈因果性：通过ablation证实第20层移除反而提升性能，证明其是信息流阻塞点而非功能模块；Stable-Mamba重训后瓶颈熵下降22%，验证干预有效性。\n\n🔎分析总结  \n🔸SPD分析显示Mamba第20层存在典型“扩张-压缩”相变：熵达峰值1.19、有效秩最高7.59、KL散度高达813，表明信息在此被强制收敛至窄参数子集。  \n🔸Delta敏感子空间具有强因果必要性：对其ablation导致困惑度激增394.1%，远超Transformer（<10%），证实Mamba事实推理高度依赖该递归路径。  \n🔸后处理干预泛化性强：同一套超参（Layer 20 + ×5/×2缩放）在5种SSM架构、6个基准上平均提升8.27%，且在IFEval指令跟随任务中单点提升17.5%。  \n🔸Stable-Mamba实现架构级突破：在RULER QA任务+15.3pp、PathFinder+35pp，超越原版Mamba及Hyena/DenseMamba等变体，同时推理延迟仅增加15%。  \n🔸瓶颈根源在于dt_proj.bias的非线性门控：其冻结特性（CoV=0.001）形成硬性时序阈值，扰动实验显示其响应呈sigmoid型，证实其为学习所得的动态信息开关。\n\n💡个人观点  \n论文创新性在于将Transformer领域成熟的“神经元/头级”解释范式，迁移升维为SSM专属的“激活子空间-参数耦合”分析框架；其最大洞见是揭示SSM高效性与脆弱性的共生本质——线性状态演化与固定Δ离散化虽保障O(N)复杂度，却必然催生层间信息流瓶颈；而“瓶颈即接口”的思想（既可干预又可重构）为下一代高效序列模型的设计提供了可复用的方法论范式。\n    "
+    },
+    {
+        "title": "Reinforcing Real-world Service Agents: Balancing Utility and Cost in Task-oriented Dialogue",
+        "authors": [
+            "Ning Gao",
+            "Wei Zhang",
+            "Yuqin Dai",
+            "Ling Shi",
+            "Ziyin Wang",
+            "Yujie Wang",
+            "Wei He",
+            "Jinpeng Wang",
+            "Chaozheng Wang"
+        ],
+        "categories": [
+            "cs.CL",
+            "cs.AI"
+        ],
+        "published_date": "2026-02-26",
+        "arxiv_id": "2602.22697v1",
+        "pdf_url": "https://arxiv.org/pdf/2602.22697v1",
+        "summary": "The rapid evolution of Large Language Models (LLMs) has accelerated the transition from conversational chatbots to general agents. However, effectively balancing empathetic communication with budget-aware decision-making remains an open challenge. Since existing methods fail to capture these complex strategic trade-offs, we propose InteractCS-RL, a framework that reframes task-oriented dialogue as a multi-granularity reinforcement learning process. Specifically, we first establish a User-centric Interaction Framework to provide a high-fidelity training gym, enabling agents to dynamically explore diverse strategies with persona-driven users. Then, we introduce Cost-aware Multi-turn Policy Optimization (CMPO) with a hybrid advantage estimation strategy. By integrating generative process credits and employing a PID-Lagrangian cost controller, CMPO effectively guides the policy to explore Pareto boundary between user reward and global cost constraints. Extensive experiments on customized real business scenarios demonstrate that InteractCS-RL significantly outperform other baselines across three evaluation dimensions. Further evaluation on tool-agent-user interaction benchmarks verify InteractCS-RL robustness across diverse domains.",
+        "tag": "强化学习",
+        "success": true,
+        "file_path": "./output/2026-02-26/papers\\2602.22697v1【强化学习-美团】Reinforcing Real-world Service Agents_ Balancing Utility and Cost in Task-oriented Dialogue.pdf",
+        "institution_status": "keep",
+        "institution": "美团",
+        "first_institution": "美团",
+        "institution_category": "国内工业界",
+        "note": "📖标题：Reinforcing Real-world Service Agents: Balancing Utility and Cost in Task-oriented Dialogue\n🌐来源：arXiv, 2602.22697v1\n\n笔记标题：多粒度成本感知对话强化学习\n\n🛎️文章简介  \n🔸研究问题：如何在真实客服对话中同时优化用户满意度与运营成本？  \n🔸主要贡献：提出InteractCS-RL框架，首次将任务型对话建模为兼顾会话过程质量、终端结果效用与全局成本约束的多粒度强化学习问题，并实现帕累托最优平衡。\n\n📝重点思路  \n🔸构建用户中心交互框架，通过内在人格特质（沟通风格、信息披露倾向、问题解决策略、情感稳定性）与外在需求类型（刚性追偿、反馈导向等）双维度建模，驱动高保真动态用户模拟。  \n🔸设计成本感知多轮策略优化（CMPO），融合三层优势估计：会话级结果效用（用户满意度）、回合级生成过程信用（基于原则的GenRM评分）、PID调控的拉格朗日成本罚项。  \n🔸采用分层奖励机制，将业务规范转化为可学习的细粒度评估原则（如阶段适配性、人格引导性），由大模型作为裁判进行离散化打分并加权聚合。  \n🔸引入PID控制器动态调节拉格朗日乘子λ，实时校正瞬时违规与长期偏差，使成本约束稳定收敛于预设阈值（如代金券发放率≤30%）。\n\n🔎分析总结  \n🔸在食品配送纠纷场景中，InteractCS-RL显著超越SFT及PPO/GRPO等基线：用户满意度提升超40%，完成率达100%，代金券率精准控制在30.8%，验证成本可控性。  \n🔸消融实验证明：移除PID控制导致代金券率震荡至34.5%；固定λ则过度抑制行为（24.6%），损害满意度；仅依赖过程奖励会导致成本失控（41.2%）。  \n🔸跨域测试τ2-bench显示，其Pass@1平均提升5.6%，DB率与动作奖励同步上升，证明成本意识训练能泛化至零售、航空等新领域，增强工具调用与逻辑一致性。  \n🔸案例分析揭示：相比SFT模型陷入重复致歉或机械追问，InteractCS-RL能依据用户人格动态切换策略——对不合作用户坚守流程、对灵活用户主动补偿、对合作用户高效闭环。\n\n💡个人观点  \n该论文创新性在于突破传统对话系统单目标优化范式，将“共情表达”与“预算纪律”统一为可协同学习的多粒度目标；其人格驱动的仿真环境与PID-Lagrangian成本调控机制，为真实服务场景中LLM代理的稳健部署提供了可复现、可解释、可约束的技术路径。\n    "
+    },
+    {
+        "title": "S2O: Early Stopping for Sparse Attention via Online Permutation",
+        "authors": [
+            "Yu Zhang",
+            "Songwei Liu",
+            "Chenqian Yan",
+            "Sheng Lin",
+            "Beichen Ning",
+            "Fangmin Chen",
+            "Xing Wang"
+        ],
+        "categories": [
+            "cs.LG",
+            "cs.AI"
+        ],
+        "published_date": "2026-02-26",
+        "arxiv_id": "2602.22575v1",
+        "pdf_url": "https://arxiv.org/pdf/2602.22575v1",
+        "summary": "Attention scales quadratically with sequence length, fundamentally limiting long-context inference. Existing block-granularity sparsification can reduce latency, but coarse blocks impose an intrinsic sparsity ceiling, making further improvements difficult even with carefully engineered designs. We present S2O, which performs early stopping for sparse attention via online permutation. Inspired by virtual-to-physical address mapping in memory systems, S2O revisits and factorizes FlashAttention execution, enabling inference to load non-contiguous tokens rather than a contiguous span in the original order. Motivated by fine-grained structures in attention heatmaps, we transform explicit permutation into an online, index-guided, discrete loading policy; with extremely lightweight preprocessing and index-remapping overhead, it concentrates importance on a small set of high-priority blocks. Building on this importance-guided online permutation for loading, S2O further introduces an early-stopping rule: computation proceeds from high to low importance; once the current block score falls below a threshold, S2O terminates early and skips the remaining low-contribution blocks, thereby increasing effective sparsity and reducing computation under a controlled error budget.\n  As a result, S2O substantially raises the practical sparsity ceiling. On Llama-3.1-8B under a 128K context, S2O reduces single-operator MSE by 3.82$\\times$ at matched sparsity, and reduces prefill compute density by 3.31$\\times$ at matched MSE; meanwhile, it preserves end-to-end accuracy and achieves 7.51$\\times$ attention and 3.81$\\times$ end-to-end speedups.",
+        "tag": "注意力机制优化",
+        "success": true,
+        "file_path": "./output/2026-02-26/papers\\2602.22575v1【注意力机制优化-字节跳动】S2O_ Early Stopping for Sparse Attention via Online Permutation.pdf",
+        "institution_status": "keep",
+        "institution": "字节跳动、厦门大学",
+        "first_institution": "字节跳动",
+        "institution_category": "国内工业界",
+        "note": "📖标题：S2O: Early Stopping for Sparse Attention via Online Permutation\n🌐来源：arXiv, 2602.22575v1\n\n笔记标题：在线置换实现稀疏注意力早停\n\n🛎️文章简介  \n🔸研究问题：如何突破块粒度稀疏注意力的固有稀疏上限，提升长上下文场景下稀疏注意力的精度与效率？  \n🔸主要贡献：提出S2O方法，通过轻量级在线置换与重要性驱动的早停机制，在不物理重排张量的前提下显著提升有效稀疏度，同时控制误差预算。\n\n📝重点思路  \n🔸受内存虚拟地址映射启发，将FlashAttention执行解耦为逻辑索引加载与物理块计算，实现“非连续但高效”的token加载。  \n🔸基于注意力热图中普遍存在的细粒度条纹结构（水平/垂直/斜向），设计条纹粒度均值池化信号，在段内对Q进行轻量排序（Qperm），并用段代表查询对历史KV做全局因果前缀排序（KVperm）。  \n🔸引入坐标调度的在线置换加载策略：仅维护两个轻量索引数组，运行时通过gather操作按置换顺序加载Q/K/V tile，保持原始内存布局与FlashAttention计算流水线不变。  \n🔸提出单调增益早停规则：按KVperm顺序逐块处理历史前缀，动态监控归一化质量ℓ的边际增量∆ℓ；当∆ℓ低于阈值τ·ℓ时立即终止，跳过低贡献块。\n\n🔎分析总结  \n🔸在128K上下文Llama-3.1-8B上，S2O在相同稀疏率下将单算子MSE降低3.82倍，或在相同MSE下将计算密度降低3.31倍。  \n🔸实现7.51×注意力算子加速与3.81×端到端预填充加速，且预处理开销占比极小（<10%），主要来自一次轻量排序。  \n🔸消融实验表明，早停阈值τ是精度-速度权衡的主导因素，而段长S影响较小；启用Q端段内置换可进一步提升早停有效性。  \n🔸热图可视化证实：相比局部置换（PBS）等方法，S2O能更有效地将注意力质量聚拢至左上区域，显著减少块内冗余计算。\n\n💡个人观点  \n该工作创新性地将系统级思想（虚拟地址映射）迁移到注意力优化中，以“索引即调度”替代“重排即优化”，规避了物理置换的高开销；其条纹感知的重要性建模与在线早停机制协同突破了块粒度瓶颈，为长上下文稀疏化提供了兼具理论洞察与工程落地的新范式。\n    "
+    },
+    {
+        "title": "Search-P1: Path-Centric Reward Shaping for Stable and Efficient Agentic RAG Training",
+        "authors": [
+            "Tianle Xia",
+            "Ming Xu",
+            "Lingxiang Hu",
+            "Yiding Sun",
+            "Wenwei Li",
+            "Linfang Shang",
+            "Liqun Liu",
+            "Peng Shu",
+            "Huan Yu",
+            "Jie Jiang"
+        ],
+        "categories": [
+            "cs.CL",
+            "cs.IR",
+            "cs.LG"
+        ],
+        "published_date": "2026-02-26",
+        "arxiv_id": "2602.22576v1",
+        "pdf_url": "https://arxiv.org/pdf/2602.22576v1",
+        "summary": "Retrieval-Augmented Generation (RAG) enhances large language models (LLMs) by incorporating external knowledge, yet traditional single-round retrieval struggles with complex multi-step reasoning. Agentic RAG addresses this by enabling LLMs to dynamically decide when and what to retrieve, but current RL-based training methods suffer from sparse outcome rewards that discard intermediate signals and low sample efficiency where failed samples contribute nothing. We propose Search-P1, a framework that introduces path-centric reward shaping for agentic RAG training, comprising two key components: (1) Path-Centric Reward, which evaluates the structural quality of reasoning trajectories through order-agnostic step coverage and soft scoring that extracts learning signals even from failed samples, and (2) Dual-Track Path Scoring with offline-generated reference planners that assesses paths from both self-consistency and reference-alignment perspectives. Experiments on multiple QA benchmarks demonstrate that Search-P1 achieves significant improvements over Search-R1 and other strong baselines, with an average accuracy gain of 7.7 points.",
+        "tag": "RAG 检索优化",
+        "success": true,
+        "file_path": "./output/2026-02-26/papers\\2602.22576v1【RAG 检索优化-腾讯】Search-P1_ Path-Centric Reward Shaping for Stable and Efficient Agentic RAG Training.pdf",
+        "institution_status": "keep",
+        "institution": "腾讯",
+        "first_institution": "腾讯",
+        "institution_category": "国内工业界",
+        "note": "📖标题：Search-P1: Path-Centric Reward Shaping for Stable and Efficient Agentic RAG Training\n🌐来源：arXiv, 2602.22576v1\n\n笔记标题：路径中心奖励塑形\n\n🛎️文章简介  \n🔸研究问题：如何解决基于强化学习的智能体RAG训练中奖励稀疏、样本效率低和收敛慢的问题？  \n🔸主要贡献：提出SEARCH-P1框架，通过路径中心奖励塑形，从推理轨迹结构质量中提取密集、细粒度、容错的学习信号，显著提升训练稳定性与效率。\n\n📝重点思路  \n🔸将隐式推理计划显式化为独立“规划步”，使路径结构可观测、可评估。  \n🔸设计双轨路径评分机制：自一致性轨（评估模型是否忠实执行自身规划）与参考对齐轨（基于离线生成的高质量参考路径进行顺序无关匹配）。  \n🔸引入软结果评分，在答案错误时仍依据答案部分正确性与推理质量给予梯度信号，变零奖励样本为有效训练数据。  \n🔸融合格式奖励（鼓励结构化输出）、路径奖励与软结果奖励，构建多目标加权总奖励函数，平衡准确性与推理质量。\n\n🔎分析总结  \n🔸双轨路径评分缺一不可：移除任一轨道均导致平均准确率下降3–5个百分点，验证二者互补性。  \n🔸软结果评分对复杂任务增益更显著：在多跳QA上提升+3.5%，在工业广告QA（AD-QA）上达+8.8%，说明路径质量信号在高难度场景中价值更高。  \n🔸路径奖励权重存在“甜点区”（λp=0.3）：过低则监督不足，过高则引发奖励过拟合（路径分升但准确率降）。  \n🔸SEARCH-P1训练收敛速度提升超2倍：60步即达Search-R1 150步后的性能，且推理轮次更少、更稳定，尤其在失败案例中轮次波动显著降低。\n\n💡个人观点  \n该工作创新性地将强化学习的监督粒度从“最终答案”下沉至“完整推理路径”，通过显式规划建模、双视角轨迹评估与软性结果反馈，系统性破解了agentic RAG训练中的三大顽疾；其路径中心思想不依赖特定模型或RL算法，具备强泛化性与工程落地潜力。\n    "
+    },
+    {
+        "title": "SideQuest: Model-Driven KV Cache Management for Long-Horizon Agentic Reasoning",
+        "authors": [
+            "Sanjay Kariyappa",
+            "G. Edward Suh"
+        ],
+        "categories": [
+            "cs.AI",
+            "cs.LG"
+        ],
+        "published_date": "2026-02-26",
+        "arxiv_id": "2602.22603v1",
+        "pdf_url": "https://arxiv.org/pdf/2602.22603v1",
+        "summary": "Long-running agentic tasks, such as deep research, require multi-hop reasoning over information distributed across multiple webpages and documents. In such tasks, the LLM context is dominated by tokens from external retrieval, causing memory usage to grow rapidly and limiting decode performance. While several KV cache compression techniques exist for long-context inputs, we find that existing heuristics fail to support multi-step reasoning models effectively. We address this challenge with SideQuest -- a novel approach that leverages the Large Reasoning Model (LRM) itself to perform KV cache compression by reasoning about the usefulness of tokens in its context. To prevent the tokens associated with this management process from polluting the model's memory, we frame KV cache compression as an auxiliary task executed in parallel to the main reasoning task. Our evaluations, using a model trained with just 215 samples, show that SideQuest reduces peak token usage by up to 65% on agentic tasks with minimal degradation in accuracy, outperforming heuristic-based KV cache compression techniques.",
+        "tag": "Agent 记忆",
+        "success": true,
+        "file_path": "./output/2026-02-26/papers\\2602.22603v1【Agent 记忆-英伟达】SideQuest_ Model-Driven KV Cache Management for Long-Horizon Agentic Reasoning.pdf",
+        "institution_status": "keep",
+        "institution": "英伟达",
+        "first_institution": "英伟达",
+        "institution_category": "国外工业界",
+        "note": "📖标题：SideQuest: Model-Driven KV Cache Management for Long-Horizon Agentic Reasoning\n🌐来源：arXiv, 2602.22603v1\n\n笔记标题：模型驱动的KV缓存管理\n\n🛎️文章简介  \n🔸研究问题：如何在长周期智能体多步推理中实现高效、语义感知的KV缓存压缩，避免静态启发式方法导致的关键信息过早丢弃？  \n🔸主要贡献：提出SideQuest框架，首次将KV缓存管理建模为大推理模型（LRM）自主执行的并行辅助任务，通过模型自身语义理解动态识别并清除失效工具响应，显著降低内存开销且几乎不损推理精度。\n\n📝重点思路  \n🔸设计并行双线程架构：主推理线程执行ReAct流程，辅助线程定期在共享上下文上运行，专责内存管理，避免管理token污染主注意力窗口。  \n🔸引入触发式模型 steering：在辅助线程输入前添加“Memory management mode”提示，并结合任务特定微调，使模型精准切换至缓存清理模式。  \n🔸基于回溯分析构建训练数据：对正确推理轨迹标注各工具输出的“最后使用轮次”，生成带掩码的模拟压缩场景及对应删除指令，联合蒸馏损失与交叉熵损失联合优化。  \n🔸聚焦工具响应级细粒度清理：仅针对浏览器工具返回的带游标标识（如[Cursor 0]）内容进行对象级驱逐，兼顾可解释性与工程可行性。\n\n🔎分析总结  \n🔸SideQuest在FRAMES和BrowseComp基准上将峰值token用量降低56–65%，KV缓存读取量减少53–71%，而准确率仅下降最多2%（FRAMES）和5%（BrowseComp），远优于H2O、SnapKV等启发式方法。  \n🔸固定token预算的启发式方法在任务难度分布宽泛时表现脆弱——简单任务浪费内存，复杂任务因硬截断而崩溃；SideQuest自适应按需清理，无需人工设定预算。  \n🔸SideQuest显著提升生产服务性能：在单H100 GPU上，系统吞吐量提升83.9%，峰值KV缓存占用下降53.9%，总基准测试耗时减少36.8%。  \n🔸其鲁棒性更强：非完成率（含解析失败、上下文超限、死循环）与未压缩基线相当，而启发式方法常因误删关键token导致语法或逻辑断裂，产生大量不可解析响应。\n\n💡个人观点  \n该论文的核心创新在于将传统视为系统级约束的KV缓存管理，升维为模型自身的可学习推理能力——不是用外部规则“剪枝”，而是让模型“理解何时该遗忘”。其并行轻量架构、回溯式数据合成与游标级操作设计，兼具理论深度与工程落地性，为长程智能体的高效推理提供了新范式。\n    "
+    },
+    {
+        "title": "Test-Time Scaling with Diffusion Language Models via Reward-Guided Stitching",
+        "authors": [
+            "Roy Miles",
+            "Aysim Toker",
+            "Andreea-Maria Oncescu",
+            "Songcen Xu",
+            "Jiankang Deng",
+            "Ismail Elezi"
+        ],
+        "categories": [
+            "cs.CL",
+            "cs.AI"
+        ],
+        "published_date": "2026-02-26",
+        "arxiv_id": "2602.22871v1",
+        "pdf_url": "https://arxiv.org/pdf/2602.22871v1",
+        "summary": "Reasoning with large language models often benefits from generating multiple chains-of-thought, but existing aggregation strategies are typically trajectory-level (e.g., selecting the best trace or voting on the final answer), discarding useful intermediate work from partial or \"nearly correct\" attempts. We propose Stitching Noisy Diffusion Thoughts, a self-consistency framework that turns cheap diffusion-sampled reasoning into a reusable pool of step-level candidates. Given a problem, we (i) sample many diverse, low-cost reasoning trajectories using a masked diffusion language model, (ii) score every intermediate step with an off-the-shelf process reward model (PRM), and (iii) stitch these highest-quality steps across trajectories into a composite rationale. This rationale then conditions an autoregressive (AR) model (solver) to recompute only the final answer. This modular pipeline separates exploration (diffusion) from evaluation and solution synthesis, avoiding monolithic unified hybrids while preserving broad search. Across math reasoning benchmarks, we find that step-level recombination is most beneficial on harder problems, and ablations highlight the importance of the final AR solver in converting stitched but imperfect rationales into accurate answers. Using low-confidence diffusion sampling with parallel, independent rollouts, our training-free framework improves average accuracy by up to 23.8% across six math and coding tasks. At the same time, it achieves up to a 1.8x latency reduction relative to both traditional diffusion models (e.g., Dream, LLaDA) and unified architectures (e.g., TiDAR). Code is available at https://github.com/roymiles/diffusion-stitching.",
+        "tag": "过程奖励",
+        "success": true,
+        "file_path": "./output/2026-02-26/papers\\2602.22871v1【过程奖励-华为】Test-Time Scaling with Diffusion Language Models via Reward-Guided Stitching.pdf",
+        "institution_status": "keep",
+        "institution": "华为",
+        "first_institution": "华为",
+        "institution_category": "国内工业界",
+        "note": "📖标题：Test-Time Scaling with Diffusion Language Models via Reward-Guided Stitching\n🌐来源：arXiv, 2602.22871v1\n\n笔记标题：扩散思维拼接提升推理\n\n🛎️文章简介  \n🔸研究问题：如何在不增加延迟的前提下，有效利用扩散模型生成的多样化但嘈杂的推理路径来提升大语言模型的推理准确率？  \n🔸主要贡献：提出一种训练无关、模块化的“扩散思维拼接”框架，通过步骤级奖励引导筛选与重组，显著提升数学与代码任务的准确率-延迟帕累托前沿。\n\n📝重点思路  \n🔸使用低置信度掩码扩散语言模型并行采样多条推理路径，兼顾多样性与低成本探索。  \n🔸引入现成的过程奖励模型（PRM）对每条路径中每个中间步骤独立打分，构建全局高质量步骤池。  \n🔸基于置信度阈值与最优轨迹锚定策略，跨路径拼接高分步骤形成复合推理链，并添加置信度标注。  \n🔸用轻量自回归求解器以原始问题和拼接链为条件，仅重新生成最终答案，实现纠错与整合。\n\n🔎分析总结  \n🔸步骤级拼接在难题上增益更显著，表明中间正确子推导比完整路径更具复用价值。  \n🔸AR求解器不可或缺：即使拼接链存在冗余或矛盾，其仍能通过重计算恢复高精度答案。  \n🔸降低扩散采样置信度可大幅减少推理步数（最高降24.4%），而精度几乎不变，验证噪声鲁棒性。  \n🔸并行生成+集中拼接的设计使系统线性扩展，N增大不增加端到端延迟，且在4条路径时已达性能饱和。  \n🔸该方法在6个数学与编程基准上平均准确率提升达23.8%，端到端延迟比TiDAR等统一架构低1.8倍。\n\n💡个人观点  \n论文创新点在于打破“轨迹即单元”的固有范式，将推理解耦为探索（扩散）、评估（PRM）、合成（AR）三阶段；其核心洞见是“局部正确性可跨路径迁移”，通过细粒度评分与拼接，以极小开销激活了被传统聚合策略丢弃的大量中间知识，为测试时高效缩放提供了新范式。\n    "
+    },
+    {
+        "title": "Towards Faithful Industrial RAG: A Reinforced Co-adaptation Framework for Advertising QA",
+        "authors": [
+            "Wenwei Li",
+            "Ming Xu",
+            "Tianle Xia",
+            "Lingxiang Hu",
+            "Yiding Sun",
+            "Linfang Shang",
+            "Liqun Liu",
+            "Peng Shu",
+            "Huan Yu",
+            "Jie Jiang"
+        ],
+        "categories": [
+            "cs.CL"
+        ],
+        "published_date": "2026-02-26",
+        "arxiv_id": "2602.22584v1",
+        "pdf_url": "https://arxiv.org/pdf/2602.22584v1",
+        "summary": "Industrial advertising question answering (QA) is a high-stakes task in which hallucinated content, particularly fabricated URLs, can lead to financial loss, compliance violations, and legal risk. Although Retrieval-Augmented Generation (RAG) is widely adopted, deploying it in production remains challenging because industrial knowledge is inherently relational, frequently updated, and insufficiently aligned with generation objectives. We propose a reinforced co-adaptation framework that jointly optimizes retrieval and generation through two components: (1) Graph-aware Retrieval (GraphRAG), which models entity-relation structure over a high-citation knowledge subgraph for multi-hop, domain-specific evidence selection; and (2) evidence-constrained reinforcement learning via Group Relative Policy Optimization (GRPO) with multi-dimensional rewards covering faithfulness, style compliance, safety, and URL validity. Experiments on an internal advertising QA dataset show consistent gains across expert-judged dimensions including accuracy, completeness, and safety, while reducing the hallucination rate by 72\\%. A two-week online A/B test demonstrates a 28.6\\% increase in like rate, a 46.2\\% decrease in dislike rate, and a 92.7\\% reduction in URL hallucination. The system has been running in production for over half a year and has served millions of QA interactions.",
+        "tag": "RAG 检索优化",
+        "success": true,
+        "file_path": "./output/2026-02-26/papers\\2602.22584v1【RAG 检索优化-腾讯】Towards Faithful Industrial RAG_ A Reinforced Co-adaptation Framework for Advertising QA.pdf",
+        "institution_status": "keep",
+        "institution": "腾讯",
+        "first_institution": "腾讯",
+        "institution_category": "国内工业界",
+        "note": "📖标题：Towards Faithful Industrial RAG: A Reinforced Co-adaptation Framework for Advertising QA\n🌐来源：arXiv, 2602.22584v1\n\n笔记标题：工业RAG可信协同优化\n\n🛎️文章简介  \n🔸研究问题：如何在高风险工业广告问答场景中，系统性降低大模型幻觉（尤其是伪造URL），同时保障生成答案的事实忠实性、合规性与业务实用性？  \n🔸主要贡献：提出首个面向工业广告QA的检索-生成联合强化协同框架，通过图感知检索与多维奖励约束的RL联合优化，显著抑制幻觉并提升线上用户满意度。\n\n📝重点思路  \n🔸构建图感知检索（GraphRAG）模块，基于高频引用知识子图建模实体-关系结构，支持多跳推理，并采用并行通道（GraphRAG+传统RAG）兼顾效率与召回。  \n🔸设计证据约束的强化学习生成模块，以Qwen3-32B为基座，采用Group Relative Policy Optimization（GRPO）算法，在无独立critic模型下稳定训练。  \n🔸定义四维奖励函数：证据忠实性（LLM-as-judge比对）、风格合规性（广告领域语气/格式）、安全性（政策违规检测）、URL有效性（链接存在性+HTTP状态码验证）。  \n🔸引入高引用知识库动态裁剪机制，依据线上查询日志的“引用热度”自动筛选Top-N%知识节点，平衡图计算开销与语义覆盖能力。  \n🔸全流程部署安全护栏：流式生成中实时检测并过滤幻觉URL与违规内容，确保最终输出零URL幻觉。\n\n🔎分析总结  \n🔸GraphRAG使每查询有效知识片段数提升61.5%，召回有效性达90.5%，显著优于Base RAG（73.6%），验证其对复杂流程知识的建模优势。  \n🔸RL微调使幻觉率相对下降72%（0.0047→0.0013），且在FaithEval反事实/无答案场景下拒绝能力更强，证明其泛化忠实性提升。  \n🔸线上A/B测试显示：喜欢率+28.6%，不喜欢率−46.2%，URL幻觉率−92.7%，证实用户感知质量与可靠性双重提升。  \n🔸多维奖励训练中，忠实性与URL有效性收敛最快，风格与安全性提升较缓，反映工业合规要求需更精细建模。  \n🔸端到端延迟3.1秒（+24%），仍在可接受范围；GraphRAG单模块耗时最高（852ms），验证高引用子图裁剪设计的必要性。\n\n💡个人观点  \n该论文创新性在于打破RAG中检索与生成的割裂范式，首次将图结构先验知识建模与多目标强化学习深度耦合，且所有设计均锚定工业落地痛点：用引用热度驱动图构建解决更新滞后，用GRPO规避critic不稳定性，用URL有效性硬约束直击高危幻觉。其价值不仅在于技术组合，更在于为高风险垂直领域RAG提供了“可验证、可部署、可度量”的可信范式。\n    "
+    },
+    {
+        "title": "Vectorizing the Trie: Efficient Constrained Decoding for LLM-based Generative Retrieval on Accelerators",
+        "authors": [
+            "Zhengyang Su",
+            "Isay Katsman",
+            "Yueqi Wang",
+            "Ruining He",
+            "Lukasz Heldt",
+            "Raghunandan Keshavan",
+            "Shao-Chuan Wang",
+            "Xinyang Yi",
+            "Mingyan Gao",
+            "Onkar Dalal",
+            "Lichan Hong",
+            "Ed Chi",
+            "Ningren Han"
+        ],
+        "categories": [
+            "cs.IR",
+            "cs.CL",
+            "cs.LG"
+        ],
+        "published_date": "2026-02-26",
+        "arxiv_id": "2602.22647v1",
+        "pdf_url": "https://arxiv.org/pdf/2602.22647v1",
+        "summary": "Generative retrieval has emerged as a powerful paradigm for LLM-based recommendation. However, industrial recommender systems often benefit from restricting the output space to a constrained subset of items based on business logic (e.g. enforcing content freshness or product category), which standard autoregressive decoding cannot natively support. Moreover, existing constrained decoding methods that make use of prefix trees (Tries) incur severe latency penalties on hardware accelerators (TPUs/GPUs). In this work, we introduce STATIC (Sparse Transition Matrix-Accelerated Trie Index for Constrained Decoding), an efficient and scalable constrained decoding technique designed specifically for high-throughput LLM-based generative retrieval on TPUs/GPUs. By flattening the prefix tree into a static Compressed Sparse Row (CSR) matrix, we transform irregular tree traversals into fully vectorized sparse matrix operations, unlocking massive efficiency gains on hardware accelerators. We deploy STATIC on a large-scale industrial video recommendation platform serving billions of users. STATIC produces significant product metric impact with minimal latency overhead (0.033 ms per step and 0.25% of inference time), achieving a 948x speedup over a CPU trie implementation and a 47-1033x speedup over a hardware-accelerated binary-search baseline. Furthermore, the runtime overhead of STATIC remains extremely low across a wide range of practical configurations. To the best of our knowledge, STATIC enables the first production-scale deployment of strictly constrained generative retrieval. In addition, evaluation on academic benchmarks demonstrates that STATIC can considerably improve cold-start performance for generative retrieval. Our code is available at https://github.com/youtube/static-constraint-decoding.",
+        "tag": "RAG 检索优化",
+        "success": true,
+        "file_path": "./output/2026-02-26/papers\\2602.22647v1【RAG 检索优化-谷歌】Vectorizing the Trie_ Efficient Constrained Decoding for LLM-based Generative Retrieval on Accelerators.pdf",
+        "institution_status": "keep",
+        "institution": "谷歌、耶鲁大学",
+        "first_institution": "谷歌",
+        "institution_category": "国外工业界",
+        "note": "📖标题：Vectorizing the Trie: Efficient Constrained Decoding for LLM-based Generative Retrieval on Accelerators\n🌐来源：arXiv, 2602.22647v1\n\n笔记标题：向量化Trie实现高效约束解码\n\n🛎️文章简介  \n🔸研究问题：如何在TPU/GPU等硬件加速器上实现低延迟、高吞吐的LLM生成式检索约束解码？  \n🔸主要贡献：提出STATIC框架，将前缀树（Trie）约束转化为静态稀疏矩阵运算，首次实现工业级严格约束生成式检索的零显著延迟部署。\n\n📝重点思路  \n🔸将约束词汇集构建的Trie结构离线扁平化为压缩稀疏行（CSR）格式的转移矩阵，消除指针跳转。  \n🔸设计分支无关（branch-free）的向量化节点转移核（VNTK），通过动态切片+掩码清洗实现固定计算图，适配XLA/Inductor编译。  \n🔸采用混合策略：对浅层（前d=2步）使用稠密布尔张量掩码实现O(1)查表；深层则依赖CSR稀疏矩阵向量化查找。  \n🔸引入堆叠CSR内存布局，将列索引与值合并存储，使单次内存事务同时获取token ID和下一节点ID，减少随机访存。  \n🔸在设备HBM中全副本存储稀疏矩阵，避免跨芯片通信，保障线性扩展性。\n\n🔎分析总结  \n🔸STATIC在YouTube真实场景下仅增加0.033ms/步延迟（占推理总时长0.25%），较CPU Trie提速948×，较最优二分搜索基线（PPV Exact）提速1033×。  \n🔸内存开销可控：每百万约束项约90MB HBM，2000万项仅需约1.5GB，远低于稠密掩码的PB级需求。  \n🔸延迟几乎不随约束集大小|C|增长（O(1) I/O复杂度），而PPV等方法呈O(log|C|)增长，在|C|=1e8时差距达百倍。  \n🔸延迟对语义ID词表大小|V|也近似恒定，因浅层用稠密掩码、深层最大分支因子实际很小。  \n🔸在线A/B测试显示，“7天新鲜度”约束使新鲜视频观看量提升5.1%，CTR与用户满意度均显著上升；冷启动实验Recall@1最高提升超4倍。\n\n💡个人观点  \n论文创新点在于深刻洞察硬件瓶颈本质——非算法逻辑，而是内存访问模式与编译范式冲突。它跳出传统树遍历思维，用线性代数重构约束解码，将“不可编译的动态控制流”转化为“可融合的静态张量操作”，是系统与算法深度协同的典范。其CSR+VNTK+混合掩码设计，兼具理论简洁性与工程鲁棒性，为大模型落地工业推荐树立了新标杆。\n    "
+    }
+]

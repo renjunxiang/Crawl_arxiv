@@ -3,7 +3,7 @@ from copy import deepcopy
 import os
 import re
 import PyPDF2
-from config.LLM_Client import client
+from config.LLM_Client import client_institution
 from config.institution import (
     foreign_industry,
     domestic_industry,
@@ -35,17 +35,23 @@ async def find_institution(paper: dict, model_name: str) -> str:
                 if idx == 0:
                     first_page += text
                     prompt = f"""
-                    请从论文的第一页中判断，论文的前两个机构是否属于我关注的机构。
-                    - 第一页内容：{first_page}
-                    - 我关注的机构及在论文中的名称：{institution}
+                    给定：
+                    1. 论文内容：{first_page}
+                    2. 我关注的机构及在论文中的名称：{institution}（key为标准名称，value为论文中可能出现的名称）
+
+                    具体操作步骤：
+                    1. 从论文中判断，论文的前两个机构是否属于我关注的机构；
+                    2. 若前两个机构均不在清单中：直接返回“无”；
+                    3. 若前两个机构至少一个在清单：提取第一页全部机构，按以下规则命名并排序；
+                    4. 命名规则：清单内机构用key名称，清单外机构用论文原文名称；
+                    5. 排序：按论文中机构出现顺序排列，多个用顿号「、」间隔。
                     
-                    返回要求：
-                    - 如果属于我关注的机构，返回机构名称，名称需要用我清单的key名称表示，多个机构用顿号间隔
-                    - 如果不属于我关注的机构，返回无
-                    - 只返回标签，不要有任何解释或额外内容
+                    返回要求（严格遵守，无任何额外内容）：
+                    1. 仅返回“无”或规范后的机构列表，不添加解释、多余标点；
+                    2. 机构名称不修改、不遗漏；
                     """
                     try:
-                        response = await client.chat.completions.create(
+                        response = await client_institution.chat.completions.create(
                             model=model_name,
                             messages=[
                                 {
@@ -56,6 +62,8 @@ async def find_institution(paper: dict, model_name: str) -> str:
                             ],
                             max_completion_tokens=100,
                             temperature=0.5,
+                            stream=False,
+                            extra_body={"enable_thinking": False},
                         )
                     except Exception as e:
                         print(f"Error: {e}")

@@ -1,7 +1,7 @@
 import asyncio
 from copy import deepcopy
 from openai import AsyncOpenAI  # 导入异步客户端
-from config.LLM_Client import client
+from config.LLM_Client import client_filter
 from config.LLM_Keywords import llm_keywords
 
 
@@ -59,27 +59,26 @@ class FilterPaper:
         给定如下信息：
         标题：{title}
         摘要：{summary}
-        请根据论文的标题和摘要，判断这篇论文是否属于大模型(LLM)中我重点关注的研究方向，并返回一个标签。
+        请根据论文的标题和摘要，严格判断这篇论文是否属于大模型(LLM)中我重点关注的研究方向，并返回一个标签。
+        判断核心：仅聚焦大模型本身相关的研究，无关内容一律判定为“不相关”，不做模糊判定。
+        核心筛选原则（严格执行，缺一不可）：
+        1. 必须聚焦大模型（LLM）本身，包括其训练算法、模型结构、训练数据、评估基准、通用应用及新模型发布，非大模型相关的AI研究均视为无关；
+        2. 绝对排除以下内容（出现任意一种，直接返回“不相关”）：
+            - 小众领域应用：考古、材料科学、哲学、医学、生物学、历史学等非通用领域的大模型应用；
+            - 纯硬件相关：仅涉及硬件设计、加速器、芯片、电路等，不涉及大模型算法/结构/数据的内容；
+            - 非大模型研究：传统NLP（如非LLM的文本分类、情感分析）、机器学习（非LLM的模型训练）、其他AI分支（如语音识别）；
+            - 大模型延伸无关内容：仅用大模型作为工具辅助其他领域研究，未涉及大模型本身优化、改进、评估的内容；
+            - 理论探讨无关：仅探讨大模型的社会影响、伦理问题、政策规范，不涉及大模型技术本身的内容。
 
-        我重点关注的研究方向包括：
-        1. 预训练算法及语料：预训练方法、预训练语料、Scaling Law等
-        2. 后训练算法及数据：SFT微调、微调数据集、奖励模型(Reward Model)、RLHF/DPO/PPO等强化学习对齐方法
-        3. 推理过程优化：思维链(CoT)优化、推理加速、测试时拓展(Test-time Scaling)
-        4. 模型评估基准：大模型评测方法、评测数据集
-        5. 大模型应用：RAG检索增强生成、Agent智能体、大模型工具集、DeepResearch
-        6. 模型技术报告：知名开源模型发布(如DeepSeek、Qwen、Llama、GPT等)的技术报告
-        7. 大模型安全：模型安全对齐、安全语料构建
-        8. 模型架构创新：Transformer改进、MoE混合专家、高效注意力机制
-        
-        返回要求：
-        - 如果与上述方向无关，返回"不相关"
-        - 如果相关，请返回一个最能代表论文研究内容的标签，如"数学语料"、"课程学习"、"过程奖励"、"快慢思考"、"奥数基准"、"RAG检索优化"、"Agent记忆"、"DeepSeek技术报告"、"安全对齐"、"MOE架构"等，这些仅供参考，不代表绝对分类。
-        - 如果同时涉及多个方向，返回一个最主要的研究内容标签
-        - 只返回标签，不要有任何解释或额外内容
-        """
+        返回要求（严格遵守，不添加任何额外内容，宽松判定即视为错误）：
+        - 若不符合核心筛选原则、超出上述8个关注方向，无论是否与AI相关，均返回"不相关"；
+        - 如果相关，请返回一个最能代表论文研究内容的标签，如"数学语料"、"课程学习"、"过程奖励"、"快慢思考"、"数学评估基准"、"RAG检索优化"、"Agent记忆"、"DeepSeek技术报告"、"安全对齐"、"MOE架构"等，仅供参考，不代表绝对分类；
+        - 若同时涉及多个方向，仅返回一个最主要的研究内容标签；
+        - 只返回标签，不要有任何解释、补充说明、标点多余内容。
+    """
         result = deepcopy(paper)
         try:
-            response = await client.chat.completions.create(
+            response = await client_filter.chat.completions.create(
                 model=self.model_name,
                 messages=[
                     {"role": "system", "content": "你是一个专业的论文打标器"},
@@ -88,6 +87,7 @@ class FilterPaper:
                 temperature=0.5,
                 max_completion_tokens=20,
                 stream=False,
+                extra_body={"enable_thinking": False},
             )
             result.update(
                 {

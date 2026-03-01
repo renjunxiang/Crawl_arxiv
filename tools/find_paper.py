@@ -1,5 +1,6 @@
 import arxiv
 from datetime import datetime, timezone, timedelta
+import time
 
 # 原始接口返回样例
 """
@@ -49,7 +50,7 @@ def find_arxiv_papers(
     categories=["cs.CL", "cs.AI", "cs.LG", "cs.IR", "cs.CV"],
     start_time=None,
     end_time=None,
-    max_results=1000,
+    max_results=500,
 ):
     """
     从arXiv API获取符合条件的论文
@@ -100,6 +101,7 @@ def find_arxiv_papers(
     )
 
     papers = []
+    n = 0
 
     try:
         # 迭代获取结果
@@ -115,6 +117,9 @@ def find_arxiv_papers(
             }
 
             papers.append(paper_info)
+            n += 1
+            if n % 10 == 0:
+                print(f"已获取 {n} 篇论文")
 
             # # 打印论文信息
             # print(f"标题: {paper_info['title']}")
@@ -141,7 +146,7 @@ if __name__ == "__main__":
     if not os.path.exists(f"./output/{date}"):
         os.makedirs(f"./output/{date}")
 
-    papers = find_arxiv_papers(categories, date, date, max_results=2000)
+    papers = find_arxiv_papers(categories, date, date, max_results=1000)
 
     with open(f"./output/{date}/papers.json", "w", encoding="utf-8") as f:
         json.dump(papers, f, ensure_ascii=False, indent=4)
