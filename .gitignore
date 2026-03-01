@@ -208,4 +208,6 @@ __marimo__/
 
 # output
 *.pdf
-*.png
+./output/2026-02-26/institution/domestic_academia/*.png
+./output/2026-02-26/institution/foreign_academia/*.png
+./output/2026-02-26/institution/industry/*.png
