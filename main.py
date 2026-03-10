@@ -245,14 +245,13 @@ if __name__ == "__main__":
     model_name = {
         "filter": "qwen3.5-plus",
         "institution": "qwen3.5-plus",
-        "note": "qwen-plus",
+        "note": "gpt-5.2-medium",
     }
-
     asyncio.run(
         main(
-            args.date,
-            model_name["filter"],
-            model_name["institution"],
-            model_name["note"],
+            date="2026-03-06",
+            filter_llm=model_name["filter"],
+            institution_llm=model_name["institution"],
+            note_llm=model_name["note"]
         )
     )
