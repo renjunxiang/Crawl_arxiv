@@ -2,7 +2,7 @@ import asyncio
 from copy import deepcopy
 from openai import AsyncOpenAI  # 导入异步客户端
 from config.LLM_Client import client_filter
-from config.LLM_Keywords import llm_keywords
+# from config.LLM_Keywords import llm_keywords
 
 
 class FilterPaper:

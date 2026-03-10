@@ -26,55 +26,55 @@ async def main(date: str, filter_llm: str, institution_llm: str, note_llm: str):
         note_llm (str): 写笔记的大模型名称
     """
     # 创建日期目录
-    if not os.path.exists(f"./output/{date}"):
-        os.makedirs(f"./output/{date}")
+    # if not os.path.exists(f"./output/{date}"):
+    #     os.makedirs(f"./output/{date}")
 
-    # =================================获取指定日期论文=================================
-    if os.path.exists(f"./output/{date}/papers.json"):
-        with open(f"./output/{date}/papers.json", "r", encoding="utf-8") as f:
-            papers = json.load(f)
-    else:
-        categories = ["cs.CL", "cs.AI", "cs.LG", "cs.IR", "cs.CV"]
-        papers = find_arxiv_papers(
-            categories, start_time=date, end_time=date, max_results=1000
-        )
-        print(f"查询到 {len(papers)} 篇论文\n")
-        # 指定日期的论文清单
-        with open(f"./output/{date}/papers.json", "w", encoding="utf-8") as f:
-            json.dump(papers, f, ensure_ascii=False, indent=4)
+    # # =================================获取指定日期论文=================================
+    # if os.path.exists(f"./output/{date}/papers.json"):
+    #     with open(f"./output/{date}/papers.json", "r", encoding="utf-8") as f:
+    #         papers = json.load(f)
+    # else:
+    #     categories = ["cs.CL", "cs.AI", "cs.LG", "cs.IR", "cs.CV"]
+    #     papers = find_arxiv_papers(
+    #         categories, start_time=date, end_time=date, max_results=1000
+    #     )
+    #     print(f"查询到 {len(papers)} 篇论文\n")
+    #     # 指定日期的论文清单
+    #     with open(f"./output/{date}/papers.json", "w", encoding="utf-8") as f:
+    #         json.dump(papers, f, ensure_ascii=False, indent=4)
 
-    # =================================筛选大模型论文=================================
-    print(f"开始筛选大模型相关论文")
-    if os.path.exists(f"./output/{date}/papers_filter.json"):
-        with open(f"./output/{date}/papers_filter.json", "r", encoding="utf-8") as f:
-            papers_filter = json.load(f)
-    else:
-        filter = FilterPaper(model_name=filter_llm, max_concurrent=5)
-        results = await filter.process_batch_llm(papers[:])
-        papers_filter = []
-        for res in results:
-            if res["tag"] != "不相关":
-                papers_filter.append(res)
-        print(f"筛选出 {len(papers_filter)} 篇论文\n")
-        # 满足条件的论文清单
-        with open(f"./output/{date}/papers_filter.json", "w", encoding="utf-8") as f:
-            json.dump(papers_filter, f, ensure_ascii=False, indent=4)
+    # # =================================筛选大模型论文=================================
+    # print(f"开始筛选大模型相关论文")
+    # if os.path.exists(f"./output/{date}/papers_filter.json"):
+    #     with open(f"./output/{date}/papers_filter.json", "r", encoding="utf-8") as f:
+    #         papers_filter = json.load(f)
+    # else:
+    #     filter = FilterPaper(model_name=filter_llm, max_concurrent=5)
+    #     results = await filter.process_batch_llm(papers[:])
+    #     papers_filter = []
+    #     for res in results:
+    #         if res["tag"] != "不相关":
+    #             papers_filter.append(res)
+    #     print(f"筛选出 {len(papers_filter)} 篇论文\n")
+    #     # 满足条件的论文清单
+    #     with open(f"./output/{date}/papers_filter.json", "w", encoding="utf-8") as f:
+    #         json.dump(papers_filter, f, ensure_ascii=False, indent=4)
 
-    # =================================下载论文=================================
-    print(f"开始下载论文")
-    if os.path.exists(f"./output/{date}/downloaded.json"):
-        with open(f"./output/{date}/downloaded.json", "r", encoding="utf-8") as f:
-            download_info = json.load(f)
-    else:
-        dp = DownloadPaper(target_folder=f"./output/{date}/papers")
-        download_info = dp.download_papers(papers_filter[:])
-        print(f"下载完成 {len(download_info)} 篇论文\n")
-        with open(
-            os.path.join(f"./output/{date}", "downloaded.json"),
-            "w",
-            encoding="utf-8",
-        ) as f:
-            json.dump(download_info, f, ensure_ascii=False, indent=4)
+    # # =================================下载论文=================================
+    # print(f"开始下载论文")
+    # if os.path.exists(f"./output/{date}/downloaded.json"):
+    #     with open(f"./output/{date}/downloaded.json", "r", encoding="utf-8") as f:
+    #         download_info = json.load(f)
+    # else:
+    #     dp = DownloadPaper(target_folder=f"./output/{date}/papers")
+    #     download_info = dp.download_papers(papers_filter[:])
+    #     print(f"下载完成 {len(download_info)} 篇论文\n")
+    #     with open(
+    #         os.path.join(f"./output/{date}", "downloaded.json"),
+    #         "w",
+    #         encoding="utf-8",
+    #     ) as f:
+    #         json.dump(download_info, f, ensure_ascii=False, indent=4)
 
     # =================================机构筛选=================================
     """
@@ -245,14 +245,13 @@ if __name__ == "__main__":
     model_name = {
         "filter": "qwen3.5-plus",
         "institution": "qwen3.5-plus",
-        "note": "qwen-plus",
+        "note": "gpt-5.2-medium",
     }
-
     asyncio.run(
         main(
-            args.date,
-            model_name["filter"],
-            model_name["institution"],
-            model_name["note"],
+            date="2026-03-06",
+            filter_llm=model_name["filter"],
+            institution_llm=model_name["institution"],
+            note_llm=model_name["note"]
         )
     )
