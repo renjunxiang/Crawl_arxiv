@@ -50,7 +50,7 @@ def find_arxiv_papers(
     categories=["cs.CL", "cs.AI", "cs.LG", "cs.IR", "cs.CV"],
     start_time=None,
     end_time=None,
-    max_results=500,
+    max_results=1000,
 ):
     """
     从arXiv API获取符合条件的论文
@@ -91,7 +91,11 @@ def find_arxiv_papers(
     # 3. 配置 Client 和 Search
     # 即使只需要几天的论文，我们也建议设置较大的 max_results，
     # 然后通过日期判断来 break (停止) 循环，这样效率最高。
-    client = arxiv.Client(page_size=100)
+    client = arxiv.Client(
+        page_size=1000,
+        delay_seconds=10,  # 增加请求间隔（arXiv官方建议3秒以上）
+        num_retries=10,  # 遭遇 429 错误时，内部自动重试的次数
+    )
 
     search = arxiv.Search(
         query=query,

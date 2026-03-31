@@ -1,6 +1,5 @@
 import asyncio
 from copy import deepcopy
-import os
 import PyPDF2
 from config.LLM_Client import client_note
 from config.institution import (
@@ -29,6 +28,8 @@ async def write_note(paper: dict, model_name: str) -> str:
     text = text.encode("utf-8", errors="replace").decode("utf-8")
     text_len = len(text.split())
     print(f"论文长度：{text_len}")
+    if text_len > 129000:
+        content = "论文长度超过129000，上下文截断"
 
     system_message = f"""
         你是一个论文笔记助手，请阅读论文内容，严格按照格式写这篇论文的笔记，不要带有markdown格式，字数控制在900字以内。格式如下：笔记标题：（10个字左右的中文短句说明论文的贡献）\n\n🛎️文章简介\n🔸研究问题：（用一个问句描述论文试图解决什么问题）\n🔸主要贡献：（一句话回答这篇论文有什么贡献）\n\n📝重点思路 （逐条写论文的研究方法是什么，每一条都以🔸开头）\n\n🔎分析总结 （逐条写论文通过实验分析得到了哪些结论，每一条都以🔸开头）\n\n💡个人观点\n（总结论文的创新点）
@@ -41,7 +42,7 @@ async def write_note(paper: dict, model_name: str) -> str:
                     "role": "system",
                     "content": system_message,
                 },
-                {"role": "user", "content": f"论文内容为：\n{text}"},
+                {"role": "user", "content": f"论文内容为：\n{text[:129000]}"},
             ],
             max_completion_tokens=1000,
             temperature=0.5,
@@ -53,8 +54,6 @@ async def write_note(paper: dict, model_name: str) -> str:
         content = f"生成失败：{e}"
     content = f"""📖标题：{paper["title"]}\n🌐来源：arXiv, {paper["arxiv_id"]}\n\n{content}
     """
-    if text_len > 129000:
-        content = "论文长度超过129000，上下文截断"
     paper_ = deepcopy(paper)
     paper_["note"] = content
 

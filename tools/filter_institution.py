@@ -69,11 +69,13 @@ async def find_institution(paper: dict, model_name: str) -> str:
                         print(f"Error: {e}")
                         return None
                     content = response.choices[0].message.content.strip()
+                    print(f"content: {content}")
                     paper_ = deepcopy(paper)
                     paper_["institution"] = content
 
                     # 取第一个机构
                     first_institution = paper_["institution"].split("、")[0]
+                    print(f"first_institution: {first_institution}")
                     # 清理机构名称中的非法字符（Windows文件名不允许的字符）
                     invalid_chars = r'[<>:"/\\|?*\x00-\x1f]'
                     first_institution = re.sub(invalid_chars, "_", first_institution)
@@ -109,12 +111,12 @@ def rename_file_with_institution(paper: dict) -> dict:
     first_institution = paper["first_institution"]
 
     # 如果文件名已经包含机构名称，则跳过
+    filename = os.path.basename(old_file_path)
     if f"-{first_institution}" in old_file_path:
         print(f"文件名已包含机构名称，跳过重命名: {filename}")
         return paper
 
     # 解析原文件名: arxiv_id【tag】title.pdf
-    filename = os.path.basename(old_file_path)
     dir_path = os.path.dirname(old_file_path)
 
     print(f"尝试重命名文件: {filename}")

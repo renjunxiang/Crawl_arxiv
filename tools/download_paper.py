@@ -13,7 +13,7 @@ class DownloadPaper:
         if not os.path.exists(target_folder):
             os.makedirs(target_folder)
 
-    def download_papers(self, papers, target_folder=None):
+    def download_papers(self, papers, target_folder=None, wait_time=5):
         """
         下载PDF论文到指定文件夹
 
@@ -62,9 +62,8 @@ class DownloadPaper:
                 download_info.append(paper_)
 
             except Exception as e:
-                print(f"下载失败 ({url}): {str(e)}")
-                print(f"下载成功: {paper.get('arxiv_id', '')}")
-                time.sleep(1)  # 避免请求过快
+                print(f"{paper.get('arxiv_id', '')}下载失败 ({url}): {str(e)}")
+            time.sleep(wait_time)  # 避免请求过快
 
         print(
             f"\n所有下载完成! 共下载 {len(papers)} 个文件到 {os.path.abspath(target_folder)}"
