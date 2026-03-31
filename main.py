@@ -1,7 +1,5 @@
 import os, json
 from tools.find_paper import find_arxiv_papers
-
-from tools.find_paper_v1 import main_ant_move
 from tools.filter_paper import FilterPaper
 from tools.download_paper import DownloadPaper
 from tools.filter_institution import find_institution_batch
